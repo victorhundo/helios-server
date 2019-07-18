@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  django:
+    build: ./django
+    image: django-server
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/app
+    environment:
+      - DB_HOST=postgres
+      - DB_PASSWORD=example
+      - DB_USER=postgres
+    depends_on:
+      - db
+    links:
+      - db:postgres
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./postgres/scripts:/docker-entrypoint-initdb.d

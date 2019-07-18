@@ -33,7 +33,7 @@ ROOT_URLCONF = 'urls'
 
 ROOT_PATH = os.path.dirname(__file__)
 
-# add admins of the form: 
+# add admins of the form:
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
 ADMINS = (
@@ -55,7 +55,10 @@ SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '1') == '1')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'helios'
+        'NAME': 'helios',
+        'USER': 'helios',
+        'HOST': 'postgres',
+        'PASSWORD': 'mudar123'
     }
 }
 
@@ -343,7 +346,7 @@ AUTH_LDAP_ALWAYS_UPDATE_USER = False
 AUTH_BIND_USERID_TO_VOTERID = ['ldap']
 
 # Shibboleth auth settings
-SHIBBOLETH_ATTRIBUTE_MAP = { 
+SHIBBOLETH_ATTRIBUTE_MAP = {
     #"Shibboleth-givenName": (True, "first_name"),
     "Shib-inetOrgPerson-cn": (True, "common_name"),
     "Shib-inetOrgPerson-sn": (True, "last_name"),
@@ -375,7 +378,7 @@ if ROLLBAR_ACCESS_TOKEN:
   MIDDLEWARE_CLASSES += ('rollbar.contrib.django.middleware.RollbarNotifierMiddleware',)
   ROLLBAR = {
     'access_token': ROLLBAR_ACCESS_TOKEN,
-    'environment': 'development' if DEBUG else 'production',  
+    'environment': 'development' if DEBUG else 'production',
   }
 
 FEATURE_ELECTION = False

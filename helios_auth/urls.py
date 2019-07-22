@@ -36,8 +36,6 @@ urlpatterns = patterns('',
     # ldap
     (r'^ldap/login', ldap_login_view),
 
-    (r'^api/', UserApi.as_view()),
-
     # shibboleth
     (r'^shib/login', shibboleth_login_view),
     (r'^shib/register', shibboleth_register),

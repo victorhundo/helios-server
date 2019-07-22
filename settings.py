@@ -186,6 +186,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.admin',
+    'rest_framework',
     ## needed for queues
     'djcelery',
     'kombu.transport.django',

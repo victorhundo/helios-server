@@ -1,6 +1,6 @@
 #!/bin/bash
-PGPASSWORD=$DB_PASSWORD dropdb helios --host=$DB_USER --username=$DB_USER
-PGPASSWORD=$DB_PASSWORD createdb helios --host=$DB_USER --username=$DB_USER
+PGPASSWORD=$DB_PASSWORD dropdb helios --host=$DB_HOST --username=$DB_USER
+PGPASSWORD=$DB_PASSWORD createdb helios --host=$DB_HOST --username=$DB_USER
 python manage.py syncdb --noinput
 python manage.py migrate
 

@@ -1,22 +1,36 @@
 version: '3.1'
 
 services:
-  django:
+  # django:
+  #   build: ./django
+  #   image: django-server
+  #   restart: always
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ../:/app
+  #   environment:
+  #     - DB_HOST=db
+  #     - DB_PASSWORD=example
+  #     - DB_USER=postgres
+  #   depends_on:
+  #     - db
+  #   links:
+  #     - db:postgres
+
+  api:
     build: ./django
     image: django-server
     restart: always
     ports:
-      - "8000:8000"
-    volumes:
-      - ../:/app
+      - "3000:8000"
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=db
       - DB_PASSWORD=example
       - DB_USER=postgres
-    depends_on:
-      - db
-    links:
-      - db:postgres
+      - API=true
+    volumes:
+      - ../:/app
 
   db:
     image: postgres

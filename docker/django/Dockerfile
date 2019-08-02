@@ -1,9 +1,10 @@
-FROM django:1.8-python2
+FROM django:python2
 
 RUN apt-get update && apt-get install -y \
   build-essential \
   libldap2-dev \
   libsasl2-dev \
+  libffi-dev \
 && apt-get clean  \
 && rm -rf /var/lib/apt/lists/*
 

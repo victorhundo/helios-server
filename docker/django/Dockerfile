@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
   libldap2-dev \
   libsasl2-dev \
   libffi-dev \
+  curl \
 && apt-get clean  \
 && rm -rf /var/lib/apt/lists/*
 

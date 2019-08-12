@@ -12,6 +12,11 @@ if [ -z "$API" ]; then
   python manage.py compilemessages
   python manage.py runserver 0.0.0.0:8000
 else
+
+  until curl curl -s 'http://django:8000' 2> /dev/null; do
+      sleep 1
+  done
+
   pip install -r api-requirements.txt
   PGPASSWORD=$DB_PASSWORD dropdb helios --host=$DB_HOST --username=$DB_USER
   PGPASSWORD=$DB_PASSWORD createdb helios --host=$DB_HOST --username=$DB_USER

@@ -20,17 +20,3 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({'status': '201'})
         except ValueError as err:
             return Response({'status': '400', 'message':str(err)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AuthViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    
-    @detail_route(methods=['post'])
-    def login(self, request, pk=None):
-        user = self.get_object()
-        try:
-            user = json.loads(request.body)
-            return Response({'status': '201'})
-        except ValueError as err:
-            return Response({'status': '400', 'message':str(err)}, status=status.HTTP_400_BAD_REQUEST)

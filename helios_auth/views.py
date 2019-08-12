@@ -26,7 +26,7 @@ def index(request):
   """
   the page from which one chooses how to log in.
   """
-  
+
   user = get_user(request)
 
   # single auth system?
@@ -35,7 +35,7 @@ def index(request):
 
   #if helios_auth.DEFAULT_AUTH_SYSTEM and not user:
   #  return HttpResponseRedirect(reverse(start, args=[helios_auth.DEFAULT_AUTH_SYSTEM])+ '?return_url=' + request.GET.get('return_url', ''))
-  
+
   default_auth_system_obj = None
   if helios_auth.DEFAULT_AUTH_SYSTEM:
     default_auth_system_obj = AUTH_SYSTEMS[helios_auth.DEFAULT_AUTH_SYSTEM]
@@ -67,7 +67,7 @@ def login_box_raw(request, return_url='/', auth_systems = None):
       'enabled_auth_systems': enabled_auth_systems, 'return_url': return_url,
       'default_auth_system': helios_auth.DEFAULT_AUTH_SYSTEM, 'default_auth_system_obj': default_auth_system_obj,
       'form' : form})
-  
+
 def do_local_logout(request):
   """
   if there is a logged-in user, it is saved in the new session's "user_for_remote_logout"
@@ -78,7 +78,7 @@ def do_local_logout(request):
 
   if request.session.has_key('user'):
     user = request.session['user']
-    
+
   # 2010-08-14 be much more aggressive here
   # we save a few fields across session renewals,
   # but we definitely kill the session and renew
@@ -108,7 +108,7 @@ def do_local_logout(request):
 def do_remote_logout(request, user, return_url="/"):
   # FIXME: do something with return_url
   auth_system = AUTH_SYSTEMS[user['type']]
-  
+
   # does the auth system have a special logout procedure?
   user_for_remote_logout = request.session.get('user_for_remote_logout', None)
   del request.session['user_for_remote_logout']
@@ -123,7 +123,7 @@ def do_complete_logout(request, return_url="/"):
     response = do_remote_logout(request, user_for_remote_logout, return_url)
     return response
   return None
-  
+
 def logout(request):
   """
   logout
@@ -133,7 +133,7 @@ def logout(request):
   response = do_complete_logout(request, return_url)
   if response:
     return response
-  
+
   return HttpResponseRedirect(return_url)
 
 def _do_auth(request):
@@ -142,26 +142,26 @@ def _do_auth(request):
 
   # get the system
   system = AUTH_SYSTEMS[system_name]
-  
+
   # where to send the user to?
   redirect_url = "%s%s" % (settings.SECURE_URL_HOST,reverse(after))
   auth_url = system.get_auth_url(request, redirect_url=redirect_url)
-  
+
   if auth_url:
     return HttpResponseRedirect(auth_url)
   else:
     return HttpResponse("an error occurred trying to contact " + system_name +", try again later")
-  
+
 def start(request, system_name):
   if not (system_name in helios_auth.ENABLED_AUTH_SYSTEMS):
     return HttpResponseRedirect(reverse(index))
-  
+
   # why is this here? Let's try without it
   # request.session.save()
-  
+
   # store in the session the name of the system used for auth
   request.session['auth_system_name'] = system_name
-  
+
   # where to return to when done
   request.session['auth_return_url'] = request.GET.get('return_url', '/')
 
@@ -178,16 +178,16 @@ def after(request):
   if not request.session.has_key('auth_system_name'):
     do_local_logout(request)
     return HttpResponseRedirect("/")
-    
+
   system = AUTH_SYSTEMS[request.session['auth_system_name']]
-  
+
   # get the user info
   user = system.get_user_info_after_auth(request)
 
   if user:
     # get the user and store any new data about him
     user_obj = User.update_or_create(user['type'], user['user_id'], user['name'], user['info'], user['token'])
-    
+
     request.session['user'] = user
   else:
     return HttpResponseRedirect("%s?%s" % (reverse(perms_why), urllib.urlencode({'system_name' : request.session['auth_system_name']})))
@@ -209,4 +209,3 @@ def after_intervention(request):
     return_url = request.session['auth_return_url']
     del request.session['auth_return_url']
   return HttpResponseRedirect("%s%s" % (settings.URL_HOST, return_url))
-

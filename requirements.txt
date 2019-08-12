@@ -1,4 +1,5 @@
 Django==1.8.18
+djangorestframework==3.6.4
 anyjson==0.3.3
 celery==3.1.18
 django-celery==3.1.16
@@ -25,4 +26,4 @@ validate_email==1.2
 oauth2client==1.2
 django-auth-ldap==1.2.7
 rollbar==0.12.1
-djangorestframework==3.3.2
+bcrypt==3.1.7

@@ -26,6 +26,7 @@ class LoginViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         try:
+            print >>sys.stderr, request.body
             login = json.loads(request.body)
             username = login['username'].strip()
             password = login['password'].strip()

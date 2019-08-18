@@ -27,3 +27,4 @@ oauth2client==1.2
 django-auth-ldap==1.2.7
 rollbar==0.12.1
 bcrypt==3.1.7
+django-cors-headers==2.4.0

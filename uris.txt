@@ -1,0 +1,44 @@
+==== Helios App ===
+
+/helios/
+/helios/autologin
+/helios/testcookie
+/helios/testcookie_2
+/helios/nocookies
+/helios/stats
+/helios/e/:election_short_name
+/helios/e/:election_short_name/vote
+/helios/v/:vote_tinyhash
+/helios/t/:election_short_name/:trustee_email/:trustee_secret
+/helios/t
+/helios/elections/params
+/helios/elections/verifier
+/helios/elections/single_ballot_verifier
+/helios/elections/new
+/helios/elections/administered
+/helios/elections/voted
+/helios/elections/:election_uuid
+/helios/heliosinstitution
+
+==== Auth App ===
+
+/auth/
+/auth/logout
+/auth/start/:system_name
+/auth/after/
+/auth/why
+/auth/after_intervention
+/auth/password/login
+/auth/password/forgot
+/auth/twitter/follow
+/auth/ldap/login
+/auth/shib/login
+/auth/shib/register
+
+==== Server UI ====
+
+/
+/about
+/docs
+/faq
+/privacy

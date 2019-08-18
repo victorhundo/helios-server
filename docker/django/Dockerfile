@@ -1,4 +1,4 @@
-FROM django:python2
+FROM django:1.8.7-python2
 
 RUN apt-get update && apt-get install -y \
   build-essential \

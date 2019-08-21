@@ -46,13 +46,14 @@ class IsAuthViewsSet(viewsets.ModelViewSet):
     queryset = User.objects.none()
     serializer_class = AuthSerializer
 
-    def create(self,request):
-        try:
-            login = json.loads(request.body)
-            username = login['username'].strip()
-            obj = jwt.decode(username, 'seKre8', algorithms=['HS256'])
-            return Response({'status': '201', 'username':obj['username']})
-
-            raise ValueError('No auth')
-        except ValueError as err:
-            return Response({'status': '400', 'message':str(err)}, status=status.HTTP_400_BAD_REQUEST)
+    def list(self, request):
+        token = request.META.get('HTTP_AUTHORIZATION')
+        if (token == None or token == 'null'):
+            return Response({'status': '200', 'hasLogged': False})
+        else:
+            try:
+                obj = jwt.decode(token, 'seKre8', algorithms=['HS256'])
+                return Response({'status': '201', 'hasLogged': True, 'username': obj})
+                raise ValueError('No auth')
+            except ValueError as err:
+                return Response({'status': '200', 'hasLogged': False})

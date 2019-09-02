@@ -8,6 +8,8 @@ from jose import jwt
 
 import helios_auth.models
 import sys, json, bcrypt, datetime
+from auth_utils import *
+
 
 auth = sys.modules['helios_auth.models']
 
@@ -47,13 +49,8 @@ class IsAuthViewsSet(viewsets.ModelViewSet):
     serializer_class = AuthSerializer
 
     def list(self, request):
-        token = request.META.get('HTTP_AUTHORIZATION')
-        if (token == None or token == 'null'):
-            return Response({'status': '200', 'hasLogged': False})
+        user = check_auth(request.META.get('HTTP_AUTHORIZATION'))
+        if (user):
+            return Response({'status': '201', 'hasLogged': True, 'username': obj})
         else:
-            try:
-                obj = jwt.decode(token, 'seKre8', algorithms=['HS256'])
-                return Response({'status': '201', 'hasLogged': True, 'username': obj})
-                raise ValueError('No auth')
-            except ValueError as err:
-                return Response({'status': '200', 'hasLogged': False})
+            return Response({'status': '200', 'hasLogged': False})

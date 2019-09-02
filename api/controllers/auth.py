@@ -7,10 +7,10 @@ from rest_framework import serializers
 from jose import jwt
 
 import helios_auth.models
-import sys, json, bcrypt, datetime
+import sys, json, bcrypt, datetime, json
 from auth_utils import *
 
-
+from .serializers import UserSerializer
 auth = sys.modules['helios_auth.models']
 
 class AuthSerializer(serializers.HyperlinkedModelSerializer):
@@ -33,11 +33,11 @@ class LoginViewSet(viewsets.ModelViewSet):
             username = login['username'].strip()
             password = login['password'].strip()
             user = auth.User.get_by_type_and_id('password', username)
-
+            user_Serializer = UserSerializer(instance=user, context={'request': request})
             if self.password_check(user, password):
               expiry = datetime.date.today() + datetime.timedelta(days=50)
               token = jwt.encode({'username': username, 'expiry':str(expiry)}, 'seKre8',  algorithm='HS256')
-              return Response({'status': '201', 'token':token})
+              return Response({'status': '201', 'token':token, 'user': user_Serializer.data})
 
             raise ValueError('Bad Username or Password')
         except ValueError as err:
@@ -51,6 +51,6 @@ class IsAuthViewsSet(viewsets.ModelViewSet):
     def list(self, request):
         user = check_auth(request.META.get('HTTP_AUTHORIZATION'))
         if (user):
-            return Response({'status': '201', 'hasLogged': True, 'username': obj})
+            return Response({'status': '201', 'hasLogged': True, 'username': user})
         else:
             return Response({'status': '200', 'hasLogged': False})

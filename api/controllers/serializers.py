@@ -13,4 +13,18 @@ class ElectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Election
         fields = '__all__'
-        #fields = ('short_name', 'name', 'description',  'use_voter_aliases', 'use_advanced_audit_features', 'randomize_answer_order', 'private_p',  'help_email', 'voting_starts_at', 'voting_ends_at')
+        lookup_field = 'short_name'
+        # fields = (
+        #     'url',
+        #     'uuid',
+        #     'short_name',
+        #     'name',
+        #     'description',
+        #     'use_voter_aliases',
+        #     'use_advanced_audit_features',
+        #     'randomize_answer_order',
+        #     'private_p',
+        #     'help_email',
+        #     'voting_starts_at',
+        #     'voting_ends_at'
+        # )

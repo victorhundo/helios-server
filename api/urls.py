@@ -5,6 +5,7 @@ from rest_framework import  routers
 from .controllers.user import UserViewSet
 from .controllers.auth import LoginViewSet, IsAuthViewsSet
 from .controllers.elections import EletctionViewSet, ElectionDetailView
+from .controllers.trustee import TrusteeView, TrusteeHeliosView
 
 # Routers provide a way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -19,4 +20,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^elections/$', EletctionViewSet.as_view()),
     url(r'^elections/(?P<pk>[^/.]+)/$', ElectionDetailView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/trustee/$', TrusteeView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/trustee/add-helios$', TrusteeHeliosView.as_view()),
+
 ]

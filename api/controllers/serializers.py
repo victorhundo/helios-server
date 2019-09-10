@@ -15,7 +15,7 @@ class ElectionSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         lookup_field = 'short_name'
 
-class TrusteeSerializer(serializers.HyperlinkedModelSerializer):
+class TrusteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trustee
-        fields = '__all__'
+        fields = ('uuid', 'name', 'email', 'public_key_hash', 'decryption_factors', 'decryption_proofs')

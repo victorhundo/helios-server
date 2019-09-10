@@ -17,6 +17,7 @@ import sys, json, uuid, datetime
 class EletctionViewSet(APIView):
     def get(self, request):
         queryset = Election.objects.all()
+        print >>sys.stderr, ("OLHA ISSO >>> %s" % type(queryset))
         serializer_class = ElectionSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
 

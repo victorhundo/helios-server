@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import detail_route, list_route
-from helios.models import Election
+from helios.models import Election, Trustee
 from helios_auth.models import User
 from helios.crypto import algs, electionalgs, elgamal
 from helios.crypto import utils as cryptoutils
@@ -36,9 +36,53 @@ class TrusteeView(APIView):
 
     def get(self, request, election_pk):
         election = self.getElection(election_pk)
-        queryset = election.get_helios_trustee()
-        serializer_class = TrusteeSerializer(queryset, many=True, context={'request': request})
-        return Response(serializer_class.data)
+        if (election):
+            queryset = Trustee.get_by_election(election)
+            serializer_class = TrusteeSerializer(queryset, many=True, context={'request': request})
+            return Response(serializer_class.data)
+        else:
+            return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, election_pk):
+        election = self.getElection(election_pk)
+        if (election):
+            try:
+                body = json.loads(request.body)
+                trustee = Trustee(uuid = str(uuid.uuid1()), election = election, name=body['name'], email=body['email'])
+                trustee.save()
+                return Response({'status': '201', 'message': 'Created'}, status=status.HTTP_201_CREATED)
+            except ValueError as err:
+                return Response({'status': '400', 'message':str(err)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+class TrusteeViewDetail(APIView):
+    def getElection(self, pk):
+        queryset = Election.get_by_uuid(pk)
+        if (queryset): return queryset
+
+        queryset = Election.get_by_short_name(pk)
+        if (queryset): return queryset
+
+        return None
+
+    def get(self, request, election_pk, pk):
+        election = self.getElection(election_pk)
+        if (election):
+            queryset = Trustee.get_by_uuid(pk)
+            serializer_class = TrusteeSerializer(queryset, context={'request': request})
+            return Response(serializer_class.data)
+        else:
+            return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self,request,election_pk,pk):
+        election = self.getElection(election_pk)
+        if (election):
+            trustee = Trustee.get_by_election_and_uuid(election, pk)
+            trustee.delete()
+            return Response({'status': '202', 'message': 'Accepted'}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
 class TrusteeHeliosView(APIView):
     def getElection(self, pk):
@@ -53,9 +97,10 @@ class TrusteeHeliosView(APIView):
     def post(self, request, election_pk):
         election = self.getElection(election_pk)
         if(election):
-            election.generate_trustee(ELGAMAL_PARAMS)
-            # try:
-            # except:
-            #     return Response({'status': '500', 'message': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            try:
+                election.generate_trustee(ELGAMAL_PARAMS)
+                return Response({'status': '201', 'message': 'Created'}, status=status.HTTP_201_CREATED)
+            except:
+                return Response({'status': '500', 'message': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)

@@ -6,6 +6,7 @@ from .controllers.user import UserViewSet
 from .controllers.auth import LoginViewSet, IsAuthViewsSet
 from .controllers.elections import EletctionViewSet, ElectionDetailView
 from .controllers.trustee import TrusteeView, TrusteeHeliosView, TrusteeViewDetail
+from .controllers.voter import VoterView, VoterElebilityView
 
 # Routers provide a way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -23,5 +24,6 @@ urlpatterns = [
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/$', TrusteeView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/add-helios/$', TrusteeHeliosView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', TrusteeViewDetail.as_view()),
-
+    url(r'^elections/(?P<election_pk>[^/.]+)/voters/$', VoterView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/voters/eligibility', VoterElebilityView.as_view()),
 ]

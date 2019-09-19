@@ -2,7 +2,7 @@
 
 cd /app
 
-until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -c '\l'  2> /dev/null; do
+until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -c '\l'  &> /dev/null; do
     sleep 1
 done
 
@@ -13,7 +13,7 @@ if [ -z "$API" ]; then
   python manage.py runserver 0.0.0.0:8000
 else
 
-  until curl curl -s 'http://django:8000' 2> /dev/null; do
+  until curl -s 'http://helios:8000' &> /dev/null; do
       sleep 1
   done
 

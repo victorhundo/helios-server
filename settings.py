@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = DEBUG
 
 # set a value for production environment, alongside with debug set to false
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
+ALLOWED_HOSTS.append('helios')
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = get_from_env('SECRET_KEY', 'replaceme')

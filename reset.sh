@@ -5,4 +5,9 @@ python manage.py syncdb --noinput
 python manage.py migrate
 
 # Create a superuser
-echo "from helios_auth.models import User; User.objects.create(user_type='google',user_id='vhfsfox@gmail.com', info={'name':'Victor Hugo'})" | python manage.py shell
+echo "from helios_auth.models import User; User.objects.create(\
+  user_type='password',\
+  user_id='admin',\
+  name='Admin',\
+  admin_p='true', \
+  info={'name':'Admin', 'password':'admin'})" | python manage.py shell

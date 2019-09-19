@@ -26,15 +26,15 @@ class EletctionViewSet(APIView):
         if (user):
             try:
                 election_params = json.loads(request.body)
-                election_params['short_name'] = "%s_%s" % (election_params['short_name'], 'username')
+                election_params['short_name'] = "%s_%s" % (election_params['short_name'], user['username'])
                 election_params['uuid'] = str(uuid.uuid1())
                 #election_params['cast_url'] = settings.SECURE_URL_HOST + reverse(one_election_cast, args=[election_params['uuid']])
                 election_params['cast_url'] = 'cast_url'
                 election_params['openreg'] = False # registration starts closed
-                election_params['admin'] = User.get_by_type_and_id('password','vhugo')
+                election_params['admin'] = User.get_by_type_and_id('password',user['username'])
                 election = Election.objects.create(**election_params)
 
-                return Response({'status': '201'})
+                return Response({'status': '201', 'uuid': election_params['uuid']})
             except ValueError as err:
                 return Response({'status': '400', 'message':str(err)}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -77,5 +77,13 @@ class ElectionDetailView(APIView):
                 return self.putQuestions(queryset, body["value"])
             else:
                 return Response({'status': '401', 'message': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request,pk):
+        queryset = self.getElection(pk)
+        if (queryset):
+            queryset.delete();
+            return Response({'status': '200', 'message': 'Ok'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': '404', 'message': 'Election Not Found'}, status=status.HTTP_404_NOT_FOUND)

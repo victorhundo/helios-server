@@ -61,6 +61,10 @@ ELGAMAL_PARAMS_LD_OBJECT = datatypes.LDObject.instantiate(ELGAMAL_PARAMS, dataty
 # single election server? Load the single electionfrom models import Election
 from django.conf import settings
 
+def password_check(user, password):
+  password_hashed=bcrypt.hashpw(password.encode('utf8'), user.info['password'].encode('utf8'))
+  return (user and user.info['password'] == password_hashed)
+
 def get_election_url(election):
   return settings.URL_HOST + reverse(election_shortcut, args=[election.short_name])
 
@@ -561,6 +565,7 @@ def one_election_cast(request, election):
 
 @election_view(allow_logins=True)
 def password_voter_login(request, election):
+
   """
   This is used to log in as a voter for a particular election
   """
@@ -602,8 +607,19 @@ def password_voter_login(request, election):
 
   if password_login_form.is_valid():
     try:
-      voter = election.voter_set.get(voter_login_id = password_login_form.cleaned_data['voter_id'].strip(),
-                                     voter_password = password_login_form.cleaned_data['password'].strip())
+      login = password_login_form.cleaned_data['voter_id'].strip()
+      password = password_login_form.cleaned_data['password'].strip()
+
+
+      user = User.get_by_type_and_id('password', login)
+      if password_check(user, password):
+          voter = election.voter_set.get(voter_login_id = user.user_id, voter_password = password)
+          request.session['user'] = {'type': 'password', 'user_id' : user.user_id, 'name': user.name, 'info': user.info, 'token': None}
+          import sys, time
+          print >>sys.stderr, ("\n\n\nOLHA ISSO LOGIN >>> %s \n\n\n" % (election.uuid))
+          # time.sleep(5)
+      else:
+          voter = election.voter_set.get(voter_login_id = login, voter_password = password)
 
       request.session['CURRENT_VOTER_ID'] = voter.id
 
@@ -612,12 +628,30 @@ def password_voter_login(request, election):
         return one_election_cast_confirm(request, election.uuid)
 
     except Voter.DoesNotExist:
-      redirect_url = login_url + "?" + urllib.urlencode({
-          'bad_voter_login' : '1',
-          'return_url' : return_url
-          })
+      if user:
+          voter_uuid = str(uuid.uuid4())
+          try:
+              voter = Voter(
+              uuid= voter_uuid,
+              user = user,
+              election = election,
+              voter_password = password,
+              voter_login_id = user.user_id,
+              voter_name = user.name
+              )
+              voter.save()
+              request.session['user'] = {'type': 'password', 'user_id' : user.user_id, 'name': user.name, 'info': user.info, 'token': None}
+              request.session['CURRENT_VOTER_ID'] = voter.id
+              # if we're asked to cast, let's do it
+              if request.POST.get('cast_ballot') == "1":
+                  return one_election_cast_confirm(request, election.uuid)
+          except:
+              redirect_url = login_url + "?" + urllib.urlencode({
+              'bad_voter_login' : '1',
+              'return_url' : return_url
+              })
+              return HttpResponseRedirect(settings.SECURE_URL_HOST + redirect_url)
 
-      return HttpResponseRedirect(settings.SECURE_URL_HOST + redirect_url)
   else:
     # bad form, bad voter login
     redirect_url = login_url + "?" + urllib.urlencode({
@@ -627,21 +661,27 @@ def password_voter_login(request, election):
 
     return HttpResponseRedirect(settings.SECURE_URL_HOST + redirect_url)
 
+
   return HttpResponseRedirect(settings.SECURE_URL_HOST + return_url)
 
 @election_view()
 def one_election_cast_confirm(request, election):
   user = get_user(request)
+  my_election = Election.get_by_uuid(election)
+
 
   # if no encrypted vote, the user is reloading this page or otherwise getting here in a bad way
-  if (not request.session.has_key('encrypted_vote')) or request.session['encrypted_vote'] == None:
-    return HttpResponseRedirect(settings.URL_HOST)
+  # if (not request.session.has_key('encrypted_vote')) or request.session['encrypted_vote'] == None:
+  #   return HttpResponseRedirect(settings.URL_HOST)
 
   # election not frozen or started
-  if not election.voting_has_started():
-    return render_template(request, 'election_not_started', {'election': election})
+  # if not election.voting_has_started():
+  #   return render_template(request, 'election_not_started', {'election': election})
 
+
+  import sys,time
   voter = get_voter(request, user, election)
+
 
   # If from election auth_system search for an voter_id equal to user_id
   if user and not voter:
@@ -765,7 +805,7 @@ def one_election_cast_confirm(request, election):
       status_update_message = None
 
     # launch the verification task
-    tasks.cast_vote_verify_and_store.delay(
+    tasks.cast_vote_verify_and_store(
       cast_vote_id = cast_vote.id,
       status_update_message = status_update_message)
 
@@ -783,7 +823,9 @@ def one_election_cast_done(request, election):
   """
   user = get_user(request)
   voter = get_voter(request, user, election)
-
+  import sys, time
+  print >>sys.stderr, ("\n\nOLHA ISSO AQUI user/voter %s %s\n\n" % (user,voter))
+  time.sleep(5)
   # If from election auth_system search for an voter_id equal to user_id
   if user and not voter:
     for constraint in election.eligibility:
@@ -1049,7 +1091,7 @@ def one_election_questions(request, election):
 def _check_eligibility(election, user):
   # prevent password-users from signing up willy-nilly for other elections, doesn't make sense
   if user.user_type == 'password':
-    return False
+    return True
 
   return election.user_eligible_p(user)
 

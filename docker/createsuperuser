@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker exec -it docker_helios_1 python manage.py createsuperuser
+

@@ -30,8 +30,8 @@ def cast_vote_verify_and_store(cast_vote_id, status_update_message=None, **kwarg
 
     if result and settings.HELIOS_VOTERS_EMAIL:
         # send the signal
-        signals.vote_cast.send(sender=election, election=election, user=user, voter=voter, cast_vote=cast_vote)
-        
+        # signals.vote_cast.send(sender=election, election=election, user=user, voter=voter, cast_vote=cast_vote)
+
         if status_update_message and user.can_update_status():
             from views import get_election_url
 
@@ -39,7 +39,7 @@ def cast_vote_verify_and_store(cast_vote_id, status_update_message=None, **kwarg
     else:
         logger = cast_vote_verify_and_store.get_logger(**kwargs)
         logger.error("Failed to verify and store %d" % cast_vote_id)
-    
+
 @task()
 def voters_email(election_id, subject_template, body_template, extra_vars={},
                  voter_constraints_include=None, voter_constraints_exclude=None):
@@ -58,7 +58,7 @@ def voters_email(election_id, subject_template, body_template, extra_vars={},
         voters = voters.exclude(**voter_constraints_exclude)
 
     for voter in voters:
-        single_voter_email.delay(voter.uuid, subject_template, body_template, extra_vars)            
+        single_voter_email.delay(voter.uuid, subject_template, body_template, extra_vars)
 
 @task()
 def voters_notify(election_id, notification_template, extra_vars={}):
@@ -113,7 +113,7 @@ The encrypted tally for election %s has been computed.
 --
 Helios
 """ % election.name)
-                                
+
     if election.has_helios_trustee():
         tally_helios_decrypt.delay(election_id = election.id)
 

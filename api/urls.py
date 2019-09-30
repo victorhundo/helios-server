@@ -4,7 +4,7 @@ from rest_framework import  routers
 
 from .controllers.user import UserViewSet
 from .controllers.auth import LoginViewSet, IsAuthViewsSet
-from .controllers.elections import EletctionViewSet, ElectionDetailView, ElectionCastView
+from .controllers.elections import EletctionViewSet, ElectionDetailView, ElectionCastView, ElectionFreezeView
 from .controllers.trustee import TrusteeView, TrusteeHeliosView, TrusteeViewDetail
 from .controllers.voter import VoterView, VoterViewDetail, VoterElebilityView, VoterLoginView
 from .controllers.cast_vote import CastVoteView, CastElectionView
@@ -26,9 +26,10 @@ urlpatterns = [
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/add-helios/$', TrusteeHeliosView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', TrusteeViewDetail.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/$', VoterView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/freeze/$', ElectionFreezeView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/login/$', VoterLoginView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/eligibility', VoterElebilityView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', VoterViewDetail.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/cast/$', CastVoteView.as_view()),
-    url(r'^elections/(?P<election_pk>[^/.]+)/cast/$', CastElectionView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/cast/$', CastElectionView.as_view(), name='elections-cast'),
 ]

@@ -87,3 +87,13 @@ class ElectionDetailView(APIView):
 class ElectionCastView(APIView):
     def get(self, request, pk):
         return response(200,'ok')
+
+class ElectionFreezeView(APIView):
+    def post(self, request, election_pk):
+        try:
+            election = getElection(election_pk)
+            election.freeze()
+            return response(200,'Election %s freezed.' % election.uuid)
+        except Exception as err:
+            return get_error(err)
+        return response(200,'ok')

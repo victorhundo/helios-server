@@ -9,6 +9,10 @@ from helios.crypto import electionalgs, algs, utils
 from django.utils import timezone
 from helios import datatypes
 
+import hmac, base64, json
+
+from hashlib import sha256
+
 from api_utils import *
 from auth_utils import *
 import sys, json, bcrypt, datetime, json
@@ -23,7 +27,9 @@ def getCastVote(election_pk, voter_pk):
 def createCastVote(encrypted_vote, voter,request):
     print >>sys.stderr, encrypted_vote
     vote_fingerprint = cryptoutils.hash_b64(encrypted_vote)
-    vote = datatypes.LDObject.fromDict(utils.from_json(encrypted_vote), type_hint='legacy/EncryptedVote').wrapped_obj
+    print >>sys.stderr, vote_fingerprint
+    # vote = datatypes.LDObject.fromDict(utils.from_json(encrypted_vote), type_hint='legacy/EncryptedVote').wrapped_obj
+    vote = encrypted_vote
     cast_ip = request.META.get('REMOTE_ADDR', None)
     cast_vote_params = {
       'vote' : vote,
@@ -32,11 +38,12 @@ def createCastVote(encrypted_vote, voter,request):
       'cast_at': timezone.now(),
       'cast_ip': cast_ip
     }
+    print >>sys.stderr, cast_vote_params
     cast_vote = CastVote(**cast_vote_params)
-    cast_vote.save()
+    #cast_vote.save()
 
     # launch the verification task
-    tasks.cast_vote_verify_and_store(cast_vote.id, 'status_update_message')
+    #tasks.cast_vote_verify_and_store(cast_vote.id, 'status_update_message')
 
 
 class CastVoteView(APIView):
@@ -55,10 +62,10 @@ class CastElectionView(APIView):
             session = auth_user(request)
             user = get_user_session(session["username"])
             election = getElection(election_pk)
-            encrypted_vote = json.loads(request.data["encrypted_vote"])
+            encrypted_vote = json.loads(request.body)
             voter = election.voter_set.get(voter_login_id = user.user_id, voter_password = user.info["password"])
             res = serializer(voter,request)
-            createCastVote(request.data["encrypted_vote"],voter,request)
+            createCastVote(request.body,voter,request)
             return response(200,res.data)
             # print >>sys.stderr, "%s %s" % (user, encrypted_vote["election_uuid"])
             # return response(200,'ok')

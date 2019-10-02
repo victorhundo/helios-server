@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from helios_auth.models import User
 from helios.models import Election, Trustee, Voter, CastVote
+from helios.crypto.elgamal import PublicKey
 
 class EmptySerializer():
     def __init__(self, type):
@@ -39,4 +40,9 @@ class VoterSerializer(serializers.ModelSerializer):
 class CastVoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = CastVote
+        fields = '__all__'
+
+class PublicKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PublicKey
         fields = '__all__'

@@ -29,3 +29,4 @@ rollbar==0.12.1
 bcrypt==3.1.7
 python-jose==3.0.1
 django-cors-headers==2.4.0
+ptvsd==3.0.0

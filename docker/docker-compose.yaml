@@ -29,8 +29,11 @@ services:
       - DB_PASSWORD=example
       - DB_USER=postgres
       - API=true
+      - PYTHONUNBUFFERED=0
+      - RUN_MAIN=true
     volumes:
       - ../:/app
+      - vscode:/root/.vscode-server
 
   db:
     image: postgres
@@ -39,3 +42,6 @@ services:
       POSTGRES_PASSWORD: example
     volumes:
       - ./postgres/scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  vscode:

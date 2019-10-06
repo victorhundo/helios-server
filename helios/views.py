@@ -1380,7 +1380,7 @@ def voters_eligibility(request, election):
 
   if user.user_type == 'shibboleth' and eligibility == 'limitedreg':
     response_data = {'success': _('Constraints successfully saved')}
-    return HttpResponse(json.dumps(response_data), content_type="application/json",
+    return HttpResponse(json.dumps(response_data, separators=(',', ':')), content_type="application/json",
       status=200)
 
   return HttpResponseRedirect(settings.SECURE_URL_HOST + reverse(voters_list_pretty, args=[election.uuid]))

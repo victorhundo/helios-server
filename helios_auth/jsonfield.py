@@ -65,7 +65,7 @@ class JSONField(models.TextField):
         else:
             the_dict = value
 
-        return json.dumps(the_dict, cls=DjangoJSONEncoder)
+        return json.dumps(the_dict, cls=DjangoJSONEncoder, separators=(',', ':'))
 
 
     def value_to_string(self, obj):

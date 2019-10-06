@@ -126,7 +126,7 @@ def add_expires_at(request, user_pk):
     else:
         response_data = {'error': _('An e-mail must be informed')} 
     
-    return HttpResponse(json.dumps(response_data), content_type="application/json", 
+    return HttpResponse(json.dumps(response_data, separators=(',', ':')), content_type="application/json", 
         status=status)
 
 
@@ -176,7 +176,7 @@ def delegate_user(request, role):
         response_data = {'error': _('An e-mail must be informed')} 
         status = 400
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json", status=status)
+    return HttpResponse(json.dumps(response_data, separators=(',', ':')), content_type="application/json", status=status)
 
 
 @login_required
@@ -203,7 +203,7 @@ def revoke_user(request, user_pk):
         response_data = {'error': _('User not found')} 
         status = 400
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json", status=status)
+    return HttpResponse(json.dumps(response_data, separators=(',', ':')), content_type="application/json", status=status)
 
 
 @login_required
@@ -251,7 +251,7 @@ def elections_by_year(request, year=None):
     return HttpResponse(json.dumps(
         {'elections': 
             [{'election.pk': election.pk, 'election.name': election.name} for election in elections ]
-        }), 
+        }, separators=(',', ':')), 
         content_type="application/json", status=200)
 
 
@@ -273,7 +273,7 @@ def elections_by_type_year(request, institution_pk, type=None, year=None):
         status = 400
         response_data = {'error' : _("Institution does not exist")}
 
-    return HttpResponse(json.dumps(response_data), 
+    return HttpResponse(json.dumps(response_data, separators=(',', ':')), 
         content_type="application/json", status=200)
 
 

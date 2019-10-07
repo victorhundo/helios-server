@@ -656,7 +656,7 @@ class Election(HeliosModel):
         count = raw_result[i][j]
         pretty_question.append({'answer': a, 'count': count, 'winner': (j in winners[i])})
 
-      prettified_result.append({'question': q['short_name'], 'answers': pretty_question})
+      prettified_result.append({'question': q['question'], 'answers': pretty_question})
 
     return prettified_result
 

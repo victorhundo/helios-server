@@ -105,17 +105,17 @@ def election_compute_tally(election_id):
     election = Election.objects.get(id = election_id)
     election.compute_tally()
 
-    election_notify_admin.delay(election_id = election_id,
-                                subject = _("encrypted tally computed"),
-                                body = """
-The encrypted tally for election %s has been computed.
+#     election_notify_admin.delay(election_id = election_id,
+#                                 subject = _("encrypted tally computed"),
+#                                 body = """
+# The encrypted tally for election %s has been computed.
 
---
-Helios
-""" % election.name)
+# --
+# Helios
+# """ % election.name)
 
     if election.has_helios_trustee():
-        tally_helios_decrypt.delay(election_id = election.id)
+        tally_helios_decrypt(election_id = election.id)
 
 @task()
 def tally_helios_decrypt(election_id):

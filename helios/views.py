@@ -1172,7 +1172,7 @@ def one_election_compute_tally(request, election):
   election.tallying_started_at = timezone.now()
   election.save()
 
-  tasks.election_compute_tally.delay(election_id = election.id)
+  tasks.election_compute_tally(election_id = election.id)
 
   return HttpResponseRedirect(settings.SECURE_URL_HOST + reverse(one_election_view,args=[election.uuid]))
 

@@ -64,9 +64,8 @@ def get_encrypted_vote(request):
 class CastElectionView(APIView):
     def post(self,request,election_pk):
         try:
-            # session = auth_user(request)
-            # user = get_user_session(session["username"])
-            user = get_user_session('admin')
+            session = auth_user(request)
+            user = get_user_session(session["username"])
             election = getElection(election_pk)
             body = get_encrypted_vote(request)
             encrypted_vote = json.loads(body)

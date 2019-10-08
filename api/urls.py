@@ -8,6 +8,7 @@ from .controllers.elections import EletctionViewSet, ElectionDetailView, Electio
 from .controllers.trustee import TrusteeView, TrusteeHeliosView, TrusteeViewDetail
 from .controllers.voter import VoterView, VoterViewDetail, VoterElebilityView, VoterLoginView
 from .controllers.cast_vote import CastVoteView, CastElectionView
+from .controllers.tally import TallyViewSet
 
 # Routers provide a way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -32,4 +33,5 @@ urlpatterns = [
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', VoterViewDetail.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/cast/$', CastVoteView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/cast/$', CastElectionView.as_view(), name='elections-cast'),
+    url(r'^elections/(?P<election_pk>[^/.]+)/compute_tally/$', TallyViewSet.as_view()),
 ]

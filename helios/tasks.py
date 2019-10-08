@@ -122,15 +122,15 @@ def tally_helios_decrypt(election_id):
     activate(settings.LANGUAGE_CODE)
     election = Election.objects.get(id = election_id)
     election.helios_trustee_decrypt()
-    election_notify_admin.delay(election_id = election_id,
-                                subject = _('Helios Decrypt'),
-                                body = """
-Helios has decrypted its portion of the tally
-for election %s.
+#     election_notify_admin.delay(election_id = election_id,
+#                                 subject = _('Helios Decrypt'),
+#                                 body = """
+# Helios has decrypted its portion of the tally
+# for election %s.
 
---
-Helios
-""" % election.name)
+# --
+# Helios
+# """ % election.name)
 
 @task()
 def voter_file_process(voter_file_id):

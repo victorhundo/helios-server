@@ -30,6 +30,10 @@ def getElection(pk):
 
     raise_exception(404,'Election not Found.')
 
+def needIsFrozen(election):
+    if (not election.frozen_at):
+        raise_exception(400,'Election need is frozen')
+
 def putQuestions(election, field, value):
     if (field == "questions"):
         Election.save_questions_safely(election, value)

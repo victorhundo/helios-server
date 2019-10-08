@@ -38,8 +38,6 @@ def createCastVote(encrypted_vote, voter,request):
     cast_vote = CastVote(**cast_vote_params)
     cast_vote.save()
 
-    print >>sys.stderr, "\n[cast_vote.id]: %s\n" % (cast_vote.id)
-
     # launch the verification task
     tasks.cast_vote_verify_and_store(cast_vote.id, 'status_update_message')
 
@@ -73,8 +71,6 @@ class CastElectionView(APIView):
             res = serializer(voter,request)
             createCastVote(body,voter,request)
             return response(200,res.data)
-            # print >>sys.stderr, "%s %s" % (user, encrypted_vote["election_uuid"])
-            # return response(200,'ok')
         except Voter.DoesNotExist:
             voter = create_voter(user,election)
             return self.post(request,election_pk)

@@ -151,7 +151,7 @@ def voter_file_process(voter_file_id):
     %s
     """ % default_from_name
     election_id = voter_file.election.id
-    election_notify_admin.delay(election_id, subject, body)
+    #election_notify_admin.delay(election_id, subject, body)
 
 @task()
 def election_notify_admin(election_id, subject, body):

@@ -49,11 +49,7 @@ class CastVoteView(APIView):
             return get_error(err)
 
 def get_encrypted_vote(request):
-    try:
-        data = request.data["encrypted_vote"]
-    except:
-        data = request.body
-    return data
+    return request.body
 
 class CastElectionView(APIView):
     def post(self,request,election_pk):

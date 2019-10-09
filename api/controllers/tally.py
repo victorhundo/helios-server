@@ -42,6 +42,7 @@ class TallyViewSet(APIView):
             #Compute Tally
             if not election.voting_ended_at:
                 election.voting_ended_at = timezone.now()
+            election.voting_ends_at = timezone.now()
             election.tallying_started_at = timezone.now()
             election.save()
             tasks.election_compute_tally(election_id = election.id)

@@ -14,13 +14,13 @@ from .controllers.tally import TallyViewSet
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'auth/password', LoginViewSet, base_name='auth')
-router.register(r'auth/check', IsAuthViewsSet, base_name='check')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^auth/check/$', IsAuthViewsSet.as_view()),
     url(r'^elections/$', EletctionViewSet.as_view()),
     url(r'^elections/(?P<pk>[^/.]+)/$', ElectionDetailView.as_view(), name='election-detail'),
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/$', TrusteeView.as_view()),

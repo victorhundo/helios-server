@@ -10,15 +10,17 @@ from helios.crypto import algs, electionalgs, elgamal
 from helios.crypto import utils as cryptoutils
 from .elections import getElection
 from helios import tasks
+from helios_auth.auth_systems import password
+from helios import utils as heliosutils
+from django.utils import timezone
 
-import base64
 from validate_email import validate_email
 from django.core.files.base import ContentFile
 
 from auth_utils import *
 from api_utils import *
 from .serializers import VoterSerializer
-import sys, json, uuid, datetime, bcrypt
+import sys, json, uuid, datetime, bcrypt, random, base64
 
 def getFile(text):
     format, imgstr = text.split(';base64,') 
@@ -58,6 +60,42 @@ def get_user(pk):
 def check_voters_email(voters):
     if False in [validate_email(v['email']) for v in voters]:
         raise_exception(400, "those don't look like correct email addresses. Are you sure you uploaded a file with email address as second field?")
+
+def generate_password(length=10):
+    return heliosutils.random_string(length, alphabet='abcdefghjkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
+
+
+def voter_file_process(election,voter_file):
+    last_alias_num = election.last_alias_num
+    num_voters = 0
+    new_voters = []
+    for voter in voter_file.itervoters():
+        num_voters += 1
+        
+        # Is the voter a user?
+        user = User.get_by_type_and_id('password', voter['voter_id'])
+        if not user:
+            random_password = generate_password()
+            random_password = 'mudar123'
+            password.create_user(
+                voter['voter_id'],
+                random_password,
+                voter['name'], 
+                voter['email'])
+            user = User.get_by_type_and_id('password', voter['voter_id'])
+        create_voter(user,election)
+            
+        if election.use_voter_aliases:
+            voter_alias_integers = range(last_alias_num+1, last_alias_num+1+num_voters)
+            random.shuffle(voter_alias_integers)
+            for i, voter in enumerate(new_voters):
+                voter.alias = 'V%s' % voter_alias_integers[i]
+                voter.save()
+    
+    voter_file.num_voters = num_voters
+    voter_file.processing_finished_at = timezone.now()
+    voter_file.save()
+    
 
 def create_voter(user,election):
     voter_uuid = str(uuid.uuid4())
@@ -128,10 +166,6 @@ class VoterLoginView(APIView):
             voter = election.voter_set.get(voter_login_id = user.user_id, voter_password = user.info['password'])
             res = serializer(voter,request)
             return response(201,res.data)
-        except Voter.DoesNotExist:
-            voter = create_voter(user,election)
-            res = serializer(voter,request)
-            return response(201,res.data)
         except Exception as err:
             return get_error(err)
 
@@ -147,7 +181,7 @@ class VoterUploadFile(APIView):
             voters = check_the_file(voter_file_obj)
             # check if voter emails look like emails
             check_voters_email(voters)
-            tasks.voter_file_process(voter_file_id = voter_file_obj.id)
+            voter_file_process(election, voter_file_obj)
             return response(201,'voters created.')
         except Exception as err:
             return get_error(err)

@@ -14,14 +14,14 @@ import logging, bcrypt, sys, unicodedata
 STATUS_UPDATES = False
 
 
-def create_user(username, password, name = None):
+def create_user(username, password, name = None, email = None):
   from helios_auth.models import User
 
   user = User.get_by_type_and_id('password', username)
   if user:
     raise Exception('user exists')
 
-  info = {'password' : password, 'name': name}
+  info = {'password' : password, 'name': name, 'email': email}
   user = User.update_or_create(user_type='password', user_id=username, name = name, info = info)
   user.save()
 

@@ -103,6 +103,7 @@ def create_voter(user,election):
         uuid= voter_uuid,
         user = user,
         election = election,
+        voter_email =  user.info['email'],
         voter_password = user.info['password'],
         voter_login_id = user.user_id,
         voter_name = user.name )

@@ -51,10 +51,13 @@ class CastVoteView(APIView):
 def get_encrypted_vote(request):
     return request.body
 
+
 class CastElectionView(APIView):
     def post(self,request,election_pk):
         try:
             session = auth_user(request)
+            if(session["username"] == "admin"):
+                raise_exception(401, 'Admin is not allowed to be a voter.')
             user = get_user_session(session["username"])
             election = getElection(election_pk)
             body = get_encrypted_vote(request)
@@ -63,6 +66,8 @@ class CastElectionView(APIView):
             create_cast_vote(body,voter,request)
             return response(200,res.data)
         except Voter.DoesNotExist:
+            if (not election.openreg):
+                raise_exception(401,'User not allowed to this election')
             voter = create_voter(user,election)
             return self.post(request,election_pk)
         except Exception as err:

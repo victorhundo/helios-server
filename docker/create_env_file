@@ -1,0 +1,41 @@
+#!/bin/bash
+#################################################################################################
+#                                                                                               #
+# Script generate env_file for mail server configuration                                        #
+# Victor Hugo - victorhundo@gmail.com                                                           #
+# October 2019                                                                                  #
+#                                                                                               #
+#################################################################################################
+
+echo -n "Type the 'EMAIL SERVER' (eg: smtp.gmail.com): "
+read EMAIL_SERVER_E
+
+echo -n "Type the 'EMAIL SERVER PORT' (eg: 465): "
+read EMAIL_PORT_SERVER_E
+
+echo -n "Type the 'USER EMAIL' (eg: arthurDent42@gmail.com): "
+read EMAIL_SENDER_E
+
+echo -n "Type the 'USER EMAIL PASSWORD' (eg: 42): "
+read -s EMAIL_PASSWORD_E
+echo
+
+echo -n "Email uses SSL? (Y/n): "
+read EMAIL_SSL_E
+
+
+if [ "$EMAIL_SERVER_E" == "" ]; then 
+	EMAIL_SERVER_E="smtp.gmail.com" 
+fi
+if [ "$EMAIL_PORT_SERVER_E" == "" ]; then 
+	EMAIL_PORT_SERVER_E="465" 
+fi
+if [ "$EMAIL_SSL_E" = "n" ] || [ "$EMAIL_SSL_E" = "N" ]; then 
+	EMAIL_SSL_E=0 
+else 
+	EMAIL_SSL_E=1 
+fi
+
+echo
+echo -e "EMAIL_HOST=$EMAIL_SERVER_E\nEMAIL_PORT=$EMAIL_PORT_SERVER_E\nEMAIL_HOST_USER=$EMAIL_SENDER_E\nEMAIL_HOST_PASSWORD=$EMAIL_PASSWORD_E\nEMAIL_USE_SSL=$EMAIL_SSL_E\nDEFAULT_FROM_EMAIL=$EMAIL_SENDER_E" > .env
+sed -n -e 1,3p -e 5,6p .env

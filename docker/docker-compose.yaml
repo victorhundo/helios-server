@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     volumes:
       - ../:/app
+      - pip-cache:/root/.cache
     environment:
       - DB_HOST=db
       - DB_PASSWORD=example
@@ -25,14 +26,19 @@ services:
     ports:
       - "3000:8000"
     environment:
-      - DB_HOST=db
-      - DB_PASSWORD=example
-      - DB_USER=postgres
-      - API=true
-      - PYTHONUNBUFFERED=0
-      - RUN_MAIN=true
+      API: 'true'
+      DB_HOST: 'db'
+      DB_PASSWORD: 'example'
+      DB_USER: 'postgres'
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
     volumes:
       - ../:/app
+      - pip-cache:/root/.cache
       - vscode:/root/.vscode-server
 
   db:
@@ -44,4 +50,5 @@ services:
       - ./postgres/scripts:/docker-entrypoint-initdb.d
 
 volumes:
+  pip-cache:
   vscode:

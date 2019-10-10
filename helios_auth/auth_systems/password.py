@@ -21,6 +21,9 @@ def create_user(username, password, name = None, email = None):
   if user:
     raise Exception('user exists')
 
+  if not email:
+      email = username
+      
   info = {'password' : password, 'name': name, 'email': email}
   user = User.update_or_create(user_type='password', user_id=username, name = name, info = info)
   user.save()

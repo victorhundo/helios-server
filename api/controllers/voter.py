@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -73,18 +74,28 @@ def voter_file_process(election,voter_file):
         num_voters += 1
         
         # Is the voter a user?
+        new_user = False
         user = User.get_by_type_and_id('password', voter['voter_id'])
         if not user:
+            new_user = True
             random_password = generate_password()
-            random_password = 'mudar123'
             password.create_user(
                 voter['voter_id'],
                 random_password,
-                voter['name'], 
-                voter['email'])
+                voter['name'])
             user = User.get_by_type_and_id('password', voter['voter_id'])
-        create_voter(user,election)
+        
+        voter_registered = create_voter(user,election)
+        
+        if new_user:
+            subject = 'Eleição: Você está apto para a votar!'
+            body = u"<p>Olá, você foi registrado em uma eleição!</p><p>login: %s</p><p>senha: %s</p>" % (voter['voter_id'],random_password)
+        else:
+            subject = 'Eleição: Você está apto para a votar!'
+            body = "<p>Olá, você foi registrado em uma eleição!"
             
+        voter_registered.send_message(subject, body)
+
         if election.use_voter_aliases:
             voter_alias_integers = range(last_alias_num+1, last_alias_num+1+num_voters)
             random.shuffle(voter_alias_integers)
@@ -184,5 +195,19 @@ class VoterUploadFile(APIView):
             check_voters_email(voters)
             voter_file_process(election, voter_file_obj)
             return response(201,'voters created.')
+        except Exception as err:
+            return get_error(err)
+
+
+class VoterSendEmail(APIView):
+    def post(self, request,election_pk):
+        try:
+            voters = get_voter(election_pk)
+            subject = 'Eleição Teste'
+            body = '<h1>teste</h1>'
+            for voter in voters:
+                voter.send_message(subject, body)
+            return response(201, 'Sent emails')
+        
         except Exception as err:
             return get_error(err)

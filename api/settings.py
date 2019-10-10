@@ -141,16 +141,22 @@ HELIOS_ADMIN_ONLY = False
 HELIOS_VOTERS_UPLOAD = True
 HELIOS_VOTERS_EMAIL = True
 # authentication systems enabled
-#AUTH_ENABLED_AUTH_SYSTEMS = ['password','facebook','twitter', 'google', 'yahoo']
-#AUTH_ENABLED_AUTH_SYSTEMS = get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'shibboleth').split(",")
-#AUTH_DEFAULT_AUTH_SYSTEM = get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', 'shibboleth')
-AUTH_ENABLED_AUTH_SYSTEMS = get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'ldap').split(",")
-AUTH_DEFAULT_AUTH_SYSTEM = get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', 'ldap')
+#AUTH_ENABLED_AUTH_SYSTEMS = ['password','facebook','twitter', 'google', 'yahoo', 'ldap']
+AUTH_ENABLED_AUTH_SYSTEMS = get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'password').split(",")
+AUTH_DEFAULT_AUTH_SYSTEM = get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', 'password')
 VOTER_UPLOAD_REL_PATH = "voters/%Y/%m/%d"
 ALLOW_ELECTION_INFO_URL = (get_from_env('ALLOW_ELECTION_INFO_URL', '0') == '1')
 # Change your email settings
-DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'heliosvoting.pt@gmail.com')
-DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Sistema de Votação Eletrônica')
-SERVER_EMAIL = '%s <%s>' % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
+
 URL_HOST = get_from_env("URL_HOST", "http://localhost:3000").rstrip("/")
 SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", URL_HOST).rstrip("/")
+
+# email server
+EMAIL_HOST = get_from_env('EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(get_from_env('EMAIL_PORT', "2525"))
+EMAIL_HOST_USER = get_from_env('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_SSL = (get_from_env('EMAIL_USE_SSL', '0') == '1')
+DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Sistema de Votação Eletrônica')
+DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'heliosvoting.pt@gmail.com')
+SERVER_EMAIL = '%s <%s>' % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)

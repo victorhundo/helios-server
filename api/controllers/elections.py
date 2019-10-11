@@ -7,6 +7,8 @@ from rest_framework.decorators import detail_route, list_route
 from helios.models import Election
 from helios_auth.models import User
 from django.db.models.query import  QuerySet
+from django.utils import timezone
+
 
 from django.shortcuts import get_object_or_404
 
@@ -41,6 +43,12 @@ def putQuestions(election, field, value):
     else:
         raise_exception(400,'Field not exists.')
 
+def electionIsFinish(election):
+    #election_time = datetime.datetime.strptime(, '%Y-%m-%d %H:%M:%S')
+    if (election.voting_has_stopped()):
+        raise_exception(405,'This election is finish.')
+
+
 # ViewSets define the view behavior.
 class EletctionViewSet(APIView):
     def get(self, request):
@@ -66,6 +74,7 @@ class ElectionDetailView(APIView):
     def get(self, request, pk):
         try:
             election = getElection(pk)
+            # electionIsFinish(election)
             res = serializer(election,request)
             return Response(res.data)
         except Exception as err:
@@ -74,6 +83,7 @@ class ElectionDetailView(APIView):
     def put(self, request, pk):
         try:
             election = getElection(pk)
+            electionIsFinish(election)
             body = json.loads(request.body)
             putQuestions(election, body["field"], body["value"])
             return response(201, 'Field Updated.')

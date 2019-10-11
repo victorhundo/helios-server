@@ -9,6 +9,7 @@ from .controllers.trustee import TrusteeView, TrusteeHeliosView, TrusteeViewDeta
 from .controllers.voter import VoterView, VoterViewDetail, VoterElebilityView, VoterLoginView, VoterUploadFile, VoterSendEmail
 from .controllers.cast_vote import CastVoteView, CastElectionView
 from .controllers.tally import TallyViewSet
+from .controllers.ballot import BallotView, BallotDetailView, BallotLastView
 
 # Routers provide a way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -32,8 +33,11 @@ urlpatterns = [
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/email/$', VoterSendEmail.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/upload$', VoterUploadFile.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/eligibility', VoterElebilityView.as_view()),
-    url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', VoterViewDetail.as_view()),
-    url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/cast/$', CastVoteView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', VoterViewDetail.as_view(), name='voters-detail'),
+    url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/cast/$', CastVoteView.as_view(), name='voter-cast'),
     url(r'^elections/(?P<election_pk>[^/.]+)/cast/$', CastElectionView.as_view(), name='elections-cast'),
     url(r'^elections/(?P<election_pk>[^/.]+)/compute_tally/$', TallyViewSet.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/ballots/$', BallotView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/ballots/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', BallotDetailView.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/ballots/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/last/$', BallotLastView.as_view(), name='ballot-last'),
 ]

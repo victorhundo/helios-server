@@ -5,7 +5,7 @@ from .serializers import *
 from django.db.models.query import  QuerySet
 
 def get_error(err):
-    status_accept = [200,201,202,400,401,403,404,500]
+    status_accept = [200,201,202,400,401,403,404,405,500]
     code = err[0]
     if (code in status_accept and len(err.args) == 3):
         status_number, msg, status_flag = err.args
@@ -28,6 +28,8 @@ def get_status(code):
         return status.HTTP_403_FORBIDDEN
     elif (code == 404):
         return status.HTTP_404_NOT_FOUND
+    elif (code == 405):
+        return status.HTTP_405_METHOD_NOT_ALLOWED
     elif (code == 500):
         return status.HTTP_500_INTERNAL_SERVER_ERROR
 

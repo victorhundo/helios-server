@@ -127,7 +127,7 @@ import sys
 TESTING = 'test' in sys.argv
 # go through environment variables and override them
 def get_from_env(var, default):
-    if not TESTING and os.environ.has_key(var):
+    if not TESTING and os.environ.has_key(var) and os.environ[var] != '':
         return os.environ[var]
     else:
         return default

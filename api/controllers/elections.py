@@ -40,8 +40,26 @@ def putQuestions(election, field, value):
     if (field == "questions"):
         Election.save_questions_safely(election, value)
         election.save()
+    elif (field == "shortName"):
+        election.short_name = value
+        election.save()
+    elif (field == "name"):
+        election.name = value
+        election.save()
+    elif (field == "description"):
+        election.description = value
+        election.save()
+    elif (field == "helpEmail"):
+        election.help_email = value
+        election.save()
+    elif (field == "votingStartsAt"):
+        election.voting_starts_at = value
+        election.save()
+    elif (field == "votingEndsAt"):
+        election.voting_ends_at = value
+        election.save()
     else:
-        raise_exception(400,'Field not exists.')
+        raise_exception(400,'Field: %s not exists.' % (field))
 
 def electionIsFinish(election):
     #election_time = datetime.datetime.strptime(, '%Y-%m-%d %H:%M:%S')
@@ -83,7 +101,7 @@ class ElectionDetailView(APIView):
     def put(self, request, pk):
         try:
             election = getElection(pk)
-            electionIsFinish(election)
+            # electionIsFinish(election)
             body = json.loads(request.body)
             putQuestions(election, body["field"], body["value"])
             return response(201, 'Field Updated.')

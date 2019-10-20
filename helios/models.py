@@ -259,8 +259,8 @@ class Election(HeliosModel):
     """
     # verify all the answer_urls
     import sys
-    print >>sys.stderr, ("OLHA ISSO >>> %s" % questions)
     for q in questions:
+      print >>sys.stderr, ("OLHA ISSO >>> %s" % q)
       for answer_url in q['answer_urls']:
         if not answer_url or answer_url == "":
           continue

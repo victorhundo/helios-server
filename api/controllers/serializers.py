@@ -5,9 +5,10 @@ from helios.crypto.elgamal import PublicKey
 from rest_framework.reverse import reverse
 
 
-import datetime
+import datetime, json, collections
 
 def normalize_datetime(date):
+    if (date == None): return None
     date = date.strftime("%Y-%m-%d %H:%M:%S.%f%z")
     result = date.split('.')[0]
     microsec = date.split('.')[1][:6]
@@ -42,12 +43,44 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ElectionSerializer(serializers.ModelSerializer):
+    
+    public_key  = serializers.SerializerMethodField()
+    questions  = serializers.SerializerMethodField()
+    voting_starts_at  = serializers.SerializerMethodField()
+    voting_ends_at = serializers.SerializerMethodField()
+    frozen_at = serializers.SerializerMethodField()
+
     class Meta:
         model = Election
-        fields = ('cast_url','description','frozen_at','name','openreg','public_key','questions','short_name','use_voter_aliases','uuid','voters_hash','voting_ends_at','voting_starts_at')
-    frozen_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S.%f%z")
-    voting_ends_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S.%f%z")
-    voting_starts_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S.%f%z")
+        fields = ('cast_url','description', 'frozen_at','name','openreg','public_key','questions','short_name','use_voter_aliases','uuid','voters_hash','voting_ends_at','voting_starts_at')
+
+    def get_public_key(self,obj):
+        if (obj.public_key== None): return None
+        data = { 
+            "g": str(obj.public_key.g), 
+            "p": str(obj.public_key.p),
+            "q": str(obj.public_key.q),
+            "y": str(obj.public_key.y)
+        }
+        data_ordered = collections.OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+        return data_ordered
+
+    def get_questions(self,obj):
+        if (obj.questions == None): return None
+        questions = []
+        for q in obj.questions:
+            data_ordered = collections.OrderedDict(sorted(q.items(), key=lambda t: t[0]))
+            questions.append(data_ordered)
+        return questions
+
+    def get_voting_starts_at(self,obj):
+        return normalize_datetime(obj.voting_starts_at)
+
+    def get_voting_ends_at(self,obj):
+        return normalize_datetime(obj.voting_ends_at)
+
+    def get_frozen_at(self,obj):
+        return normalize_datetime(obj.frozen_at)
 
 class TrusteeSerializer(serializers.ModelSerializer):
     class Meta:

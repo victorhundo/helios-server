@@ -9,7 +9,7 @@ from .controllers.trustee import TrusteeView, TrusteeHeliosView, TrusteeViewDeta
 from .controllers.voter import VoterView, VoterViewDetail, VoterElebilityView, VoterLoginView, VoterUploadFile, VoterSendEmail
 from .controllers.cast_vote import CastVoteView, CastElectionView
 from .controllers.tally import TallyViewSet
-from .controllers.ballot import BallotView, BallotDetailView, BallotLastView
+from .controllers.ballot import BallotView, BallotDetailView, BallotLastView, CelereyView
 
 # Routers provide a way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -20,6 +20,7 @@ router.register(r'auth/password', LoginViewSet, base_name='auth')
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^celery', CelereyView.as_view()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^auth/check/$', IsAuthViewsSet.as_view()),
     url(r'^elections/$', EletctionViewSet.as_view()),

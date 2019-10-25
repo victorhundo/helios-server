@@ -7,7 +7,8 @@ from helios.crypto import utils as cryptoutils
 from rest_framework.reverse import reverse
 
 
-import helios.tasks as tasks
+import api.tasks as api_task
+
 import helios.datatypes as datatypes
 
 from .elections import getElection
@@ -65,5 +66,13 @@ class BallotLastView(APIView):
             voter = Voter.get_by_election_and_uuid(election, voter_pk)
             res = voter.last_cast_vote().toJSONDict()
             return response(200,res)
+        except Exception as err:
+            return get_error(err)
+
+class CelereyView(APIView):
+    def get(self,request):
+        try:
+            api_task.slow_task.delay()
+            return response(200, 'ok')
         except Exception as err:
             return get_error(err)

@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from auth_utils import *
 from api_utils import *
 from .serializers import ElectionSerializer
-import sys, json, uuid
+import sys, json, uuid, datetime
 from .elections import getElection, needIsFrozen
 from .voter import get_voter
 from django.utils import timezone
@@ -25,9 +25,29 @@ def check_election_tally_type(election):
       if q['tally_type'] != "homomorphic":
           raise_exception(400,'Election is not ready for compute tally')
 
-def check_number_voters(election_pk):
+def check_number_voters(election, election_pk):
     voter = get_voter(election_pk)
-    if (len(voter) <= 0): raise_exception(400, 'At least one vote must be cast before you do the tally')
+    if (len(voter) <= 0):
+        if (timeOut(election)):
+            emptyResult(election)
+            return False
+        else:
+            raise_exception(400, 'At least one vote must be cast before you do the tally')
+    return True
+
+def timeOut(election):
+    end_time = str(election.voting_ends_at)[:-6]
+    if (end_time.count('.') == 0):
+        end_time += '.000000'
+    end_date = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
+    return end_date < datetime.datetime.now()
+
+def emptyResult(election):
+    result = []
+    for q in election.questions:
+        result.append([0] * len(q["answers"]))
+    election.result = result
+    election.save()
 
 # ViewSets define the view behavior.
 class TallyViewSet(APIView):
@@ -36,7 +56,8 @@ class TallyViewSet(APIView):
             user = auth_user(request)
             election = getElection(election_pk)
             needIsFrozen(election)           
-            check_number_voters(election_pk)
+            if (not check_number_voters(election, election_pk)):
+                return response(201, 'empty tally computed')
             check_election_tally_type(election)
 
             #Compute Tally
@@ -45,10 +66,10 @@ class TallyViewSet(APIView):
             election.voting_ends_at = timezone.now()
             election.tallying_started_at = timezone.now()
             election.save()
-            tasks.election_compute_tally(election_id = election.id)
+            tasks.election_compute_tally(election_id = election.id) #computar
 
             #Combine Decrypyion
-            election.combine_decryptions()
+            election.combine_decryptions() #Você está prestes a computar a apuração desta eleição. Somente depois disso é que você verá o resultado.
             election.save()
 
             return response(201, 'tally computed')

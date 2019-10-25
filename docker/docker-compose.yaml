@@ -11,14 +11,14 @@ services:
       - ../:/app
       - pip-cache:/root/.cache
     environment:
-      - DB_HOST=db
-      - DB_PASSWORD=example
-      - DB_USER=postgres
+      DB_HOST: 'db'
+      DB_PASSWORD: 'example'
+      DB_USER: 'postgres'
     depends_on:
       - db
     links:
       - db:postgres
-
+  
   api:
     build: ./django
     image: helios-server
@@ -27,6 +27,21 @@ services:
       - "3000:8000"
     environment:
       API: 'true'
+      DB_HOST: 'db'
+      DB_PASSWORD: 'example'
+      DB_USER: 'postgres'
+    volumes:
+      - ../:/app
+      - pip-cache:/root/.cache
+      - vscode:/root/.vscode-server
+  
+  redis:
+    image: "redis:alpine"
+
+  celery:
+    build: ./django
+    environment:
+      CELERY: 'true'
       DB_HOST: 'db'
       DB_PASSWORD: 'example'
       DB_USER: 'postgres'
@@ -39,8 +54,8 @@ services:
     volumes:
       - ../:/app
       - pip-cache:/root/.cache
-      - vscode:/root/.vscode-server
-
+    depends_on:
+      - redis
   db:
     image: postgres
     restart: always

@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'helios_auth',
     'helios',
+    'api',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -160,3 +161,11 @@ EMAIL_USE_SSL = (get_from_env('EMAIL_USE_SSL', '0') == '1')
 DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Sistema de Votação Eletrônica')
 DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'heliosvoting.pt@gmail.com')
 SERVER_EMAIL = '%s <%s>' % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
+
+
+BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_RESULT_EXPIRES = 5184000 # 60 days

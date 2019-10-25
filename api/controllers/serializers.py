@@ -49,10 +49,27 @@ class ElectionSerializer(serializers.ModelSerializer):
     voting_starts_at  = serializers.SerializerMethodField()
     voting_ends_at = serializers.SerializerMethodField()
     frozen_at = serializers.SerializerMethodField()
+    result = serializers.SerializerMethodField()
 
     class Meta:
         model = Election
-        fields = ('cast_url','description', 'frozen_at','name','openreg','public_key','questions','short_name','use_voter_aliases','uuid','voters_hash','voting_ends_at','voting_starts_at')
+        fields = (
+            'cast_url',
+            'description', 
+            'frozen_at',
+            'name',
+            'openreg',
+            'public_key',
+            'questions',
+            'short_name',
+            'use_voter_aliases',
+            'uuid',
+            'voters_hash',
+            'voting_ends_at',
+            'voting_starts_at',
+            'help_email',
+            'result'
+        )
 
     def get_public_key(self,obj):
         if (obj.public_key== None): return None
@@ -81,6 +98,20 @@ class ElectionSerializer(serializers.ModelSerializer):
 
     def get_frozen_at(self,obj):
         return normalize_datetime(obj.frozen_at)
+
+    def get_result(self,obj):
+        if (obj.result == None): return None
+        questions = []
+        for i in range(len(obj.result)):
+            result = []
+            for j in range(len(obj.result[i])):
+                a = {}
+                a["count_vote"] = obj.result[i][j]
+                a["name_answer"] = obj.questions[i]["answers"][j]
+                result.append(a)
+
+            questions.append({"question": obj.questions[i]["question"], "result": result})
+        return questions
 
 class TrusteeSerializer(serializers.ModelSerializer):
     class Meta:

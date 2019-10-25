@@ -5,8 +5,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from helios.models import Election, Voter, CastVote
 from helios.crypto import utils as cryptoutils
+from django.conf import settings
+from django.utils.translation import activate
 
-import helios.tasks as tasks
+
 import helios.datatypes as datatypes
 
 from .elections import getElection
@@ -37,7 +39,15 @@ def create_cast_vote(encrypted_vote, voter, request):
     cast_vote.save()
 
     # launch the verification task
-    tasks.cast_vote_verify_and_store(cast_vote.id, 'status_update_message')
+    cast_vote_verify_and_store(cast_vote.id)
+
+def cast_vote_verify_and_store(cast_vote_id):
+    activate(settings.LANGUAGE_CODE)
+    cast_vote = CastVote.objects.get(id = cast_vote_id)
+    result = cast_vote.verify_and_store()
+
+    if (not result):
+        raise_exception(400, "Failed to verify and store")
 
 class CastVoteView(APIView):
     def get(self, request, election_pk, voter_pk):
@@ -65,9 +75,9 @@ class CastElectionView(APIView):
             res = serializer(voter,request)
             create_cast_vote(body,voter,request)
             return response(200,res.data)
-        except Voter.DoesNotExist:
+        except Voter.DoesNotExist as err:
             if (not election.openreg):
-                raise_exception(401,'User not allowed to this election')
+                return get_error(err)
             voter = create_voter(user,election)
             return self.post(request,election_pk)
         except Exception as err:

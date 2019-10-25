@@ -23,6 +23,8 @@ from api_utils import *
 from .serializers import VoterSerializer
 import sys, json, uuid, datetime, bcrypt, random, base64
 
+from api.tasks import voter_send_email
+
 def getFile(text):
     format, imgstr = text.split(';base64,') 
     ext = format.split('/')[-1] 
@@ -88,13 +90,9 @@ def voter_file_process(election,voter_file):
         voter_registered = create_voter(user,election)
         
         if new_user:
-            subject = 'Eleição: Você está apto para a votar!'
-            body = u"<p>Olá, você foi registrado em uma eleição!</p><p>login: %s</p><p>senha: %s</p>" % (voter['voter_id'],random_password)
+            voter_send_email.delay(voter_registered.id, "new user", random_password)
         else:
-            subject = 'Eleição: Você está apto para a votar!'
-            body = "<p>Olá, você foi registrado em uma eleição!"
-            
-        voter_registered.send_message(subject, body)
+            voter_send_email.delay(voter_registered.id, "old user")
 
         if election.use_voter_aliases:
             voter_alias_integers = range(last_alias_num+1, last_alias_num+1+num_voters)

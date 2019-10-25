@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -18,7 +19,8 @@ from .elections import getElection, needIsFrozen
 from .voter import get_voter
 from django.utils import timezone
 
-from helios import tasks
+# from helios import tasks
+from api.tasks import election_compute_tally
 
 def check_election_tally_type(election):
     for q in election.questions:
@@ -66,11 +68,7 @@ class TallyViewSet(APIView):
             election.voting_ends_at = timezone.now()
             election.tallying_started_at = timezone.now()
             election.save()
-            tasks.election_compute_tally(election_id = election.id) #computar
-
-            #Combine Decrypyion
-            election.combine_decryptions() #Você está prestes a computar a apuração desta eleição. Somente depois disso é que você verá o resultado.
-            election.save()
+            election_compute_tally.delay(election_id = election.id) #computar
 
             return response(201, 'tally computed')
         except Exception as err:

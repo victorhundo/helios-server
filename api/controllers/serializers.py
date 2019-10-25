@@ -68,9 +68,11 @@ class ElectionSerializer(serializers.ModelSerializer):
             'voting_ends_at',
             'voting_starts_at',
             'help_email',
+            'tallying_started_at',
+            'tallying_finished_at',
             'result'
         )
-
+        
     def get_public_key(self,obj):
         if (obj.public_key== None): return None
         data = { 

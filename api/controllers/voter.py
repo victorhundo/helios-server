@@ -24,6 +24,12 @@ from .serializers import VoterSerializer
 import sys, json, uuid, datetime, bcrypt, random, base64
 
 from api.tasks import voter_send_email
+from api.controllers.elections import getElection
+from django.template.loader import get_template
+from django.template import Context
+
+
+from api.helpers.email import voter_email_template
 
 def getFile(text):
     format, imgstr = text.split(';base64,') 
@@ -90,9 +96,9 @@ def voter_file_process(election,voter_file):
         voter_registered = create_voter(user,election)
         
         if new_user:
-            voter_send_email.delay(voter_registered.id, "new user", random_password)
+            voter_send_email.delay(voter_registered.id, election.uuid, "new_user", random_password)
         else:
-            voter_send_email.delay(voter_registered.id, "old user")
+            voter_send_email.delay(voter_registered.id, election.uuid, "old_user")
 
         if election.use_voter_aliases:
             voter_alias_integers = range(last_alias_num+1, last_alias_num+1+num_voters)
@@ -201,11 +207,13 @@ class VoterSendEmail(APIView):
     def post(self, request,election_pk):
         try:
             voters = get_voter(election_pk)
-            subject = 'Eleição Teste'
-            body = '<h1>teste</h1>'
-            for voter in voters:
-                voter.send_message(subject, body)
-            return response(201, 'Sent emails')
+            election = getElection(election_pk)
+            voter = voters[0]
+            senha = 'novasenha'
+            subject = "nova"
+            html_content = voter_email_template("new_user", election_pk, voter.id, senha)
+            voter.send_message(subject, html_content)
+            return response(201, 'ok')
         
         except Exception as err:
             return get_error(err)

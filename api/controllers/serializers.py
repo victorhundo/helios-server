@@ -72,7 +72,6 @@ class ElectionSerializer(serializers.ModelSerializer):
             'tallying_finished_at',
             'result'
         )
-        
     def get_public_key(self,obj):
         if (obj.public_key== None): return None
         data = { 
@@ -130,7 +129,8 @@ class VoterSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Voter
-        fields = ('url', 'uuid', 'voter_name','voter_hash', 'alias', 'cast_at', 'election', 'user', 'vote_hash', 'vote_cast')
+        # fields = ('url', 'uuid', 'voter_name','voter_hash', 'alias', 'cast_at', 'election', 'user', 'vote_hash', 'vote_cast')
+        fields = '__all__'
     
     def get_url(self,obj):
         request = self.context.get('request')

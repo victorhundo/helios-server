@@ -1,0 +1,521 @@
+<!doctype html public "- / /w3c / /dtd xhtml 1.0 transitional / /en" "http://www.w3.org /tr/xhtml1 /dtd /xhtml1-transitional.dtd">
+<html xmlns=http://www.w3.org/1999/xhtml>
+  <head>
+     <title>Google play dev</title>
+     <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+     <!--[if !mso]><!-->
+     <meta http-equiv=X-UA-Compatible content=IE=edge>
+     <!--<![endif]-->
+     <meta name=viewport content="width=device-width, initial-scale=1.0">
+     <meta name=robots content="no index">
+     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+     <style>
+        body{
+        font-family:Roboto, Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size:12px;
+        color:#000000;
+        -webkit-text-size-adjust: none !important;
+        -webkit-font-smoothing: antialiased !important;
+        -ms-text-size-adjust: none !important;
+        }
+
+        .btn {
+         display: inline-block;
+         font-weight: 400;
+         color: #212529;
+         text-align: center;
+         vertical-align: middle;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         user-select: none;
+         background-color: transparent;
+         border: 1px solid transparent;
+         padding: 0.375rem 0.75rem;
+         font-size: 1rem;
+         line-height: 1.5;
+         border-radius: 0.25rem;
+         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+       }
+              
+       .btn-danger {
+         color: #fff;
+         background-color: #dc3545;
+         border-color: #dc3545;
+       }
+        
+        table, tr, td {
+        border-collapse:collapse;
+        mso-table-lspace:0pt;
+        mso-table-rspace:0pt;
+        }
+        a:link, a:visited, a:hover, a:active {
+        color: #4285f4;
+        text-decoration: none;
+        }
+        .appleLinks a {color:#000000 !important; text-decoration:none !important;}
+        strong {
+        font-weight: bold !important;
+        }
+        em {
+        font-style: italic !important;
+        }
+        .yshortcuts a span {
+        color: inherit !important;
+        border-bottom: none !important;
+        }
+        html {
+        -webkit-text-size-adjust: none;
+        -ms-text-size-adjust: 100%;
+        }
+        .ReadMsgBody {
+        width: 100%;
+        }
+        .ExternalClass {
+        width: 100%;
+        }
+        .ExternalClass * {
+        line-height: 100%
+        }
+        td {
+        -webkit-text-size-adjust: none;
+        }
+        a[href^=tel] {
+        color: inherit;
+        text-decoration: none;
+        }
+        .mob-hide {
+        display:none !important;  }
+        div, p, a, li, td { -webkit-text-size-adjust:none; }
+        td { text-decoration:none !important; }
+        a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        }
+        @media screen yahoo {
+        .mob-hide-back2 {
+        display: none !important;
+        } 
+        .mob-block-back2 {
+        display: block !important;
+        }
+        .width_star {
+        width: 200px !important;
+        }
+        }
+        @media screen and (max-width: 760px) {
+        .table{
+        width: 360px !important;
+        }
+        .table-main-gmail { /* Forces Gmail to display Desktop view */
+        width: 100% !important;
+        min-width:100% !important;
+        }
+        .table-l{
+        width: 90% !important;
+        }
+        .table-m{
+        width: 80% !important;
+        }
+        .table-s{
+        width: 70% !important;
+        }
+        .img {
+        width: 100% !important;
+        height: auto !important;
+        }
+        .nopad {
+        padding: 0px 0px 0px 0px !important;
+        }
+        .centertext {
+        text-align:center !important;
+        }
+        .hide {
+        display: none !important;
+        }
+        .noline {
+        border-top: none !important;
+        border-right: none !important;
+        border-bottom: none !important;
+        border-left: none !important;
+        }
+        .mobile-only {
+        display: block !important;
+        width: 100% !important;
+        max-height: none !important; 
+        color: #000000 !important;
+        font-size:32px !important;
+        }
+        .width60{
+        width:60px !important;
+        max-width:60px !important;
+        }
+        .padr25{
+        padding-right:25px !important;
+        }
+        .padr15_left{
+        padding-left:15px !important;
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        }
+        .top_heading{
+        padding-left:30px !important;
+        padding-right:30px !important;
+        }
+        .top_heading2{
+        padding-left:40px !important;
+        padding-right:40px !important;
+        }
+        .top_sub-heading{
+        padding-left:30px !important;
+        padding-right:30px !important;
+        }
+        .top_sub-heading2{
+        padding-left:50px !important;
+        padding-right:50px !important;
+        }
+        .padl25{
+        padding-left:30px !important;
+        }
+        .font-30{
+        font-size:30px !important;
+        }
+        .mob-show {
+        display: block !important;
+        width: 100% !important;
+        }
+        .mob-hide-back {
+        display: none !important;
+        }
+        .mob-block-back {
+        display: block !important;
+        }
+        .pd_left10 {
+        padding-left: 10px !important;
+        }
+        .pd_left0 {
+        padding-left: 0px !important;
+        }
+        .pd_right0 {
+        padding-right: 0px !important;
+        }
+        .pd_top0 {
+        padding-top: 0px !important;
+        }
+        .pd_top20 {
+        padding-top:20px !important;
+        }
+        .pd_bottom0 {
+        padding-bottom: 0px !important;
+        }
+        .pd_top20 {
+        padding-top: 20px !important;
+        }
+        .pd_all0 {
+        padding: 0px !important;
+        }
+        .pd_top_bottom0 {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        }
+        .pd_top_bottom24 {
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+        }
+        .pd_top_bottom15 {
+        }
+        .pd_left_15_f {
+        padding-left: 15px !important;
+        }
+        .pd_right_15_f {
+        padding-right: 15px !important;
+        }
+        .pd_top_bottom152 {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        }
+        .pd_top_bottom153 {
+        padding-bottom: 15px !important;
+        padding-top: 0px !important;
+        }
+        .pd_top_bottom151 {
+        padding-bottom: 15px !important;
+        padding-top: 5px !important;
+        }
+        .pd_right10 {
+        padding-right: 10px !important;
+        }
+        .hegt {
+        height: 84px !important;
+        }
+        .boder_top_bottom0 {
+        border-bottom: 0px !important;
+        border-top: 0px !important;
+        }
+        .logo_width {
+        width: 130px !important;
+        max-width: 130px !important;
+        }
+        .top_image_width {
+        width: 220px !important;
+        max-width: 220px !important;
+        }
+        .three_image_width {
+        width: 100px !important;
+        max-width: 100px !important;
+        }
+        .email_image_width {
+        width: 80px !important;
+        max-width: 80px !important;
+        }
+        .image_container_width {
+        width: 260px !important;
+        }
+        .text_container_width {
+        width: 100% !important;
+        }
+        .twobox_container_width {
+        width: 100% !important;
+        }
+        .pd_all15 {
+        padding-left: 15px!important; padding-right: 15px!important;
+        padding-top: 15px!important; padding-bottom: 15px!important;
+        }
+
+        .pd_15 {
+        padding-left: 15px!important; padding-right: 15px!important;
+        }
+        .pd_all10 {
+        padding-left: 7px !important;
+        padding-right: 7px !important;
+        }
+        .pd_lr0 {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        }
+        .center {
+        text-align: center !important;
+        margin: 0 auto !important;
+        }
+        .listpadd {
+        padding-bottom: 20px!important;
+        padding-left: 40px!important;
+        padding-right: 20px!important;
+        }
+        .width320 {
+        width: 320px !important;
+        }
+        .width {
+        width: 300px !important;
+        }
+        .width110 {
+        width: 110px !important;
+        }
+        .widthsocial {
+        width: 115px !important;
+        }
+        .widthstar {
+        width: 165px !important;
+        }
+        .mar {
+        margin: 0 auto !important;
+        }
+        .mar2 {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        }
+        .block {
+        display: block !important;
+        }
+        .font_13 {
+        font-size: 13px !important;
+        }
+        .font_16 {
+        font-size: 16px !important;
+        line-height: 25px !important;
+        }
+        .font_18 {
+        font-size: 18px !important;
+        line-height: 28px !important;
+        }
+        .text_align {
+        text-align: center !important;
+        }
+        }
+     </style>
+  </head>
+  <body style="margin: 0 auto; padding:0px;" bgcolor=#ffffff>
+<!-- Body Start -->
+     <table border=0 cellpadding=0 cellspacing=0 width=100%>
+        <tr>
+           <td align=center valign=top bgcolor=#ffffff>
+<!--Main content start-->
+              <table border=0 cellpadding=0 cellspacing=0 width=100% align=center>
+                 <tr>
+                    <td align=center valign=top>
+<!-- Body Start -->
+                       <table width=100% border=0 cellspacing=0 cellpadding=0 align=center style="margin:0 auto">
+                          <tbody>
+                             <tr>
+                                <td background=https://raw.githubusercontent.com/victorhundo/noiz/master/src/assets/images/bg-email.png style="background:url(http://services.google.com/fh/files/emails/google_play_dev_bg_12_dec.png) lefttop ; background-color:#ffffff; background-repeat:repeat-x; text-size-adjust:none;vertical-align:top; " height=70 bgcolor=#ffffff align=center valign=top>
+                                 <div style="padding-left:10px; padding-right:10px;">
+                                    <table border=0 cellpadding=0 cellspacing=0 width=100% align=center style="margin: 0 auto;max-width: 600px;">
+                                       <tbody>
+                                          <tr>
+                                             <td bgcolor=#c62828 height=18 align=left valign=top style=border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;mso-line-height-rule:exactly;line-height:22px;><!--[if gte mso 15]>&nbsp;<![endif]--></td>
+                                          </tr>
+                                          <tr>
+                                             <td align=centerstyle="margin: 0 auto;">
+                                                <table border=0 cellpadding=0 cellspacing=0 width=100% align=center style="margin: 0 auto;">
+                                                   <tbody>
+                                                      <tr>
+                                                         <td align=center class=width style="margin: 0 auto;  border-left: 1px solid#F5F5F5; border-right: 1px solid #F5F5F5; position:relative">
+                                                            <table width=100% border=0 cellspacing=0 cellpadding=0>
+                                                               <tbody>
+                                                                  
+<!-- First Section Start -->
+                                                                  <tr>
+                                                                             
+                                                                     <td valign=bottom bgcolor=#ffffff style="padding-left:40px; padding-right:40px; padding-top:30px; padding-bottom:25px;" class=pd_all15>     
+                                                                        <table width=100% border=0 cellspacing=0 cellpadding=0>                                                                          
+                                                                           <tbody>
+                                                                                 <tr>
+                                                                                       <td align=center>
+                                                                                          <a href="{{ client_url }}" target=_blank  > 
+                                                                                             <img src="https://raw.githubusercontent.com/victorhundo/noiz/master/src/assets/images/preto.png" alt=Client title=Client style="width: 100px;"> 
+                                                                                          </a>
+                                                                                       </td> 
+                                                                                    </tr>                                                                          
+                                                                              <tr>
+                                                                                                                                                               
+                                                                                 <td align=center valign=top dir=rtl>                                                                          
+                                                                                    <table width=100% border=0 cellspacing=0 cellpadding=0>                                                                          
+                                                                                       <tbody>                                                                          
+                                                                                          <tr>
+                                                                                             <td align=center valign=top>
+                                                                                                <table width=100% border=0 cellspacing=0 cellpadding=0 dir=ltr style="display:inline-table; vertical-align:middle;" class=text_container_width>                                                                          
+                                                                                                   <tbody>
+                                                                                                      <tr>
+                                                                                                        
+<!-- Body paragraph 1 Start -->
+                                                                                                         <td align=left valign=top style="font-family:Roboto,Helvetica,Arial,sans-serif; font-size: 13px; mso-line-height-rule: exactly; color:#4A4A4A; line-height:21px; padding-top:20px; padding-right:20px;" class=pd_right0>
+                                                                                                            <p>
+                                                                                                               {% for value in paragraphs %}
+                                                                                                               <p>
+                                                                                                                  {{ value | safe }}
+                                                                                                               </p>
+                                                                                                               {% endfor %}
+                                                                                                               <p style="text-align: center">
+                                                                                                                  <a href="{{ election_url }}" target="_blank">
+                                                                                                                  <button type="button" class="btn btn-danger" style="background: #ce1628">Votar</button>
+                                                                                                                  </a>
+                                                                                                               </p>
+                                                                                                            </p>
+                                                                                                      </tr>
+<!-- Body paragraph 1 end -->                                                                          
+                                                                                                   </tbody>                                                                        
+                                                                                                </table>                                                                          
+                                                                                             </td>
+                                                                                          </tr>
+                                                                                       </tbody>
+                                                                                    </table>
+                                                                                 </td>
+                                                                              </tr>
+                                                                           </tbody>
+                                                                        </table>
+                                                                     </td>
+                                                                  </tr>
+<!-- First Section End -->
+<!-- Signature Start -->
+                                                                           <tr>
+                                                                              <td bgcolor=#ffffff style="background-color:#ffffff; padding-left:40px; padding-right:40px; border-top: 1px solid #F5F5F5;" class=pd_15 align=center>
+                                                                                 <table width=100% border=0 cellspacing=0 cellpadding=0>                                                                          
+                                                                                    <tbody>
+                                                                                       <tr>
+                                                                                          <td height=30 align=left valign=top style=border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;mso-line-height-rule:exactly;line-height:30px;>
+                                                                                             <!--[if gte mso 15]>&nbsp;<![endif]-->
+                                                                                          </td>
+                                                                                       </tr>
+                                                                                       <tr><!-- Signature start -->
+                                                                                          <td align=left valign=top style="font-family:Roboto,Helvetica,Arial,sans-serif; font-size: 18px; mso-line-height-rule: exactly; color:#4A4A4A; line-height:22px;">
+                                                                                             {{ organization_name }}
+                                                                                          </td>
+<!-- Signature end -->
+<!-- Conversation image start -->
+                                                                          
+                                                                                          <td align=right valign=middle>
+                                                                                             <!-- <a href=https://www.google.com/appserve/mkt/p/AFnwnKWVfpNNcQQvIstMiEpcIYSzeMlemuqimoDMRvJZdyS8f0CpUZn31ZmU6B-3Tlv_iK1pWLb_7eEOjeuIB7jFWtCfwTTmmjCj-EMpG9N972tHXhBlx4UZUq56IToCh__955rhE9xOSGfjx3-7yNuntP2Ce6ATP7MT6pXE-ZTUfoqcW2Cg4TQdouhVKeQC target=_blank style="text-decoration: none; color: #4A90E2;"> <img src=https://www.gstatic.com/images/icons/material/system/1x/question_answer_grey600_24dp.png alt=Conversation title=Conversation> </a> -->
+                                                                                          </td>                                                                          
+                                                                                          <td align=right valign=middle width=35>
+                                                                                             <!-- <a href=https://www.google.com/appserve/mkt/p/AFnwnKXIGvbYIipplvvJtCVEdkZpTe-fajE2u-Nz4of5sI7WJrpC_VeSifGVOffTZIWEZkRUq_M_a7AOJjqTmtCEbuF2GMKqXSi0gfWv57PukwI3FrkGN6pubPt5UZAwCImpm3NRhdcYrsTKAQ target=_blank style="text-decoration: none; color: #4A90E2;"> <img src=https://www.gstatic.com/images/icons/material/system/1x/language_grey600_24dp.png alt=Globe title=Globe> </a> -->
+                                                                                          </td>
+<!-- Globe image end -->
+                                                                                       </tr>
+                                                                                       <tr>
+                                                                                          <td height=30 align=left valign=top style=border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;mso-line-height-rule:exactly;line-height:30px;>
+                                                                                             <!--[if gte mso 15]>&nbsp;<![endif]-->
+                                                                                          </td>
+                                                                                       </tr>
+                                                                                    </tbody>
+                                                                                 </table>
+                                                                              </td>
+                                                                           </tr>
+<!-- Signature End -->
+<!-- Footer Start -->
+                                                                           <tr>
+                                                                              <td align=center valign=top bgcolor=#F5F5F5 style=padding-bottom:20px;>
+                                                                                 <table width=100% border=0 cellspacing=0 cellpadding=0>
+                                                                                    <tbody>
+                                                                                       <tr>
+<!-- Footer legal address starts -->
+                                                                                          <td bgcolor=#F5F5F5 align=center valign=top style="color:#9B9B9B; font-family:Roboto,Helvetica,Arial,sans-serif;font-size:10px; line-height:14px; padding-left:25px; padding-right:25px; padding-top:28px;">
+                                                                                             {{ footer }}
+                                                                                          </td>
+                                                                                       </tr>
+<!-- Footer legal address ends -->
+                                                                                       <tr>
+                                                                                          <tr>
+<!-- Footer Policy start -->
+                                                                                             <td bgcolor=#F5F5F5 align=center valign=top style="color:#9B9B9B; font-family:Roboto,Helvetica,Arial,sans-serif;font-size:10px; line-height:14px; padding-left:35px; padding-right:35px; padding-top:15px; padding-bottom:15px;">
+                                                                                                <!-- Email preferences: You have received this mandatory email service announcement to update you about important changes to your Google Play Developer account. -->
+                                                                                             </td>
+                                                                                          </tr>
+<!-- Footer Unmanaged end -->
+                                                                                          <tr>
+
+                                                                                          </tbody>
+                                                                                       </table>
+                                                                                    </td>
+                                                                                 </tr>
+<!-- Footer END -->
+                                                               </tbody>
+                                                            </table>
+                                                         </td>
+                                                      </tr>
+                                                   </tbody>
+                                                </table>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </div>
+                                </td>
+                             </tr>
+                          </tbody>
+                       </table>
+                       <!-- Body End -->
+                    </td>
+                 </tr>
+              </table>
+              <!--Main content end-->
+           </td>
+        </tr>
+     </table>
+     <!-- Body End -->
+     <img height=1 width=3 src=https://www.google.com/appserve/mkt/img/AFnwnKUyOD2cPbqHRGkLiFGmQkLEu4ISlUT-1yD4WVAqS1ykGgI.gif>
+  </body>
+</html>

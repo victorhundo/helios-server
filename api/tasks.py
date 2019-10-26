@@ -6,6 +6,7 @@ from celery import shared_task
 from helios.models import Voter, Election
 from django.utils.translation import activate
 from django.utils import timezone
+from api.helpers.email import voter_email_template
 
 from api.celery import app
 
@@ -21,15 +22,11 @@ def slow_task():
     return True
 
 @app.task(name="voter_send_email_task")
-def voter_send_email(voter_id, template, random_password=None):
+def voter_send_email(voter_id, election_id, template, random_password=None):
     voter = Voter.objects.get(id = voter_id)
 
-    if (template == "new user"):
-        subject = u'Eleição: Você está apto para a votar!'
-        body = u"<p>Olá, você foi registrado em uma eleição!</p><p>login: %s</p><p>senha: %s</p>" % (voter_id,random_password)
-    else:
-        subject = u'Eleição: Você está apto para a votar!'
-        body = u"<p>Olá, você foi registrado em uma eleição!"
+    subject = u'Eleição: Você está apto para a votar!'
+    body = voter_email_template(template, election_id, voter.id, random_password)
 
     print >>sys.stderr, ('Send Email to voter: %s' % voter)
     voter.send_message(subject, body)
@@ -53,6 +50,7 @@ def tally_helios_decrypt(election_id):
 @app.task(name="combine_decryption_task")
 def combine_decrypyion(election_id):
     activate(settings.LANGUAGE_CODE)
+    time.sleep(60)
     election = Election.objects.get(id = election_id)
     election.combine_decryptions()
     election.tallying_finished_at = timezone.now()

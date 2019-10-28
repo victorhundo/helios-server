@@ -18,6 +18,18 @@ from api_utils import raise_exception, response, serializer, get_error
 from auth_utils import auth_user, get_user_session
 
 
+def get_ballots(election_pk):
+    election = getElection(election_pk)
+    voters = Voter.get_by_election(election, cast=True, order_by='cast_at', limit=None, after=None)
+    ballots = []
+    for v in voters:
+        cast = v.last_cast_vote().ld_object.short.toDict(complete=True)
+        ballots.append(cast)
+    return ballots
+
+def has_ballot(election_pk):
+    return len(get_ballots(election_pk)) > 0
+
 class BallotView(APIView):
     def get(self, request, election_pk):
         try:

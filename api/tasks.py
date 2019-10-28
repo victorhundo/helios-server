@@ -14,13 +14,6 @@ logger = get_task_logger(__name__)
 
 import sys, time
 
-@app.task(name="slow_task_task")
-def slow_task():
-    print >>sys.stderr, 'Started task, processing...'
-    time.sleep(60)
-    print >>sys.stderr, 'Finished Task'
-    return True
-
 @app.task(name="voter_send_email_task")
 def voter_send_email(voter_id, election_id, template, random_password=None):
     voter = Voter.objects.get(id = voter_id)
@@ -50,7 +43,6 @@ def tally_helios_decrypt(election_id):
 @app.task(name="combine_decryption_task")
 def combine_decrypyion(election_id):
     activate(settings.LANGUAGE_CODE)
-    time.sleep(60)
     election = Election.objects.get(id = election_id)
     election.combine_decryptions()
     election.tallying_finished_at = timezone.now()

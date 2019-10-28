@@ -170,21 +170,6 @@ class VoterViewDetail(APIView):
         except Exception as err:
             return get_error(err)
 
-class VoterLoginView(APIView):
-    def post(self,request,election_pk):
-        try:
-            election = getElection(election_pk)
-            login = json.loads(request.body)
-            username = login['username'].strip()
-            password = login['password'].strip()
-            user = get_user(username)
-            password_check(user,password)
-            voter = election.voter_set.get(voter_login_id = user.user_id, voter_password = user.info['password'])
-            res = serializer(voter,request)
-            return response(201,res.data)
-        except Exception as err:
-            return get_error(err)
-
 class VoterUploadFile(APIView):
     def post(self,request,election_pk):
         try:
@@ -197,7 +182,7 @@ class VoterUploadFile(APIView):
             voters = check_the_file(voter_file_obj)
             # check if voter emails look like emails
             check_voters_email(voters)
-            voter_file_process(election, voter_file_obj)
+            #voter_file_process(election, voter_file_obj)
             return response(201,'voters created.')
         except Exception as err:
             return get_error(err)
@@ -208,11 +193,8 @@ class VoterSendEmail(APIView):
         try:
             voters = get_voter(election_pk)
             election = getElection(election_pk)
-            voter = voters[0]
-            senha = 'novasenha'
-            subject = "nova"
-            html_content = voter_email_template("new_user", election_pk, voter.id, senha)
-            voter.send_message(subject, html_content)
+            voter_file = election.voterfile_set.get(election_id = election.id)
+            voter_file_process(election, voter_file)
             return response(201, 'ok')
         
         except Exception as err:

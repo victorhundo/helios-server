@@ -21,6 +21,7 @@ from django.utils import timezone
 
 # from helios import tasks
 from api.tasks import election_compute_tally
+from api.controllers.ballot import has_ballot
 
 def check_election_tally_type(election):
     for q in election.questions:
@@ -29,7 +30,7 @@ def check_election_tally_type(election):
 
 def check_number_voters(election, election_pk):
     voter = get_voter(election_pk)
-    if (len(voter) <= 0):
+    if (not has_ballot(election_pk)):
         if (timeOut(election)):
             emptyResult(election)
             return False

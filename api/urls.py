@@ -6,7 +6,7 @@ from .controllers.user import UserViewSet
 from .controllers.auth import LoginViewSet, IsAuthViewsSet
 from .controllers.elections import EletctionViewSet, ElectionDetailView, ElectionCastView, ElectionFreezeView
 from .controllers.trustee import TrusteeView, TrusteeHeliosView, TrusteeViewDetail
-from .controllers.voter import VoterView, VoterViewDetail, VoterElebilityView, VoterUploadFile, VoterSendEmail
+from .controllers.voter import VoterView, VoterViewDetail, VoterElebilityView, VoterFile, VoterFileRegistry
 from .controllers.cast_vote import CastVoteView, CastElectionView
 from .controllers.tally import TallyViewSet
 from .controllers.ballot import BallotView, BallotDetailView, BallotLastView, CelereyView
@@ -32,8 +32,8 @@ urlpatterns = [
     url(r'^elections/(?P<election_pk>[^/.]+)/compute_tally/$', TallyViewSet.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/add-helios/$', TrusteeHeliosView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/trustee/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', TrusteeViewDetail.as_view()),
-    url(r'^elections/(?P<election_pk>[^/.]+)/votersfile/$', VoterUploadFile.as_view()),
-    url(r'^elections/(?P<election_pk>[^/.]+)/votersfile/registry/$', VoterSendEmail.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/votersfile/$', VoterFile.as_view()),
+    url(r'^elections/(?P<election_pk>[^/.]+)/votersfile/registry/$', VoterFileRegistry.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/$', VoterView.as_view()),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/$', VoterViewDetail.as_view(), name='voters-detail'),
     url(r'^elections/(?P<election_pk>[^/.]+)/voters/(?P<voter_pk>[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})/cast/$', CastVoteView.as_view(), name='voter-cast'),

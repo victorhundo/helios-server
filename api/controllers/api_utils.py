@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
-from helios.models import Election, Voter, CastVote, Trustee, Voter
+from helios.models import Election, Voter, CastVote, Trustee, VoterFile
 from .serializers import *
 from django.db.models.query import  QuerySet
 
@@ -56,5 +56,7 @@ def serializer(obj, request, many=False):
         return TrusteeSerializer(obj, many=many, context={'request': request})
     elif (isinstance(instance, Voter)):
         return VoterSerializer(obj, many=many, context={'request': request})
+    elif (isinstance(instance, VoterFile)):
+        return VoterFileSerizlizer(obj, many=many, context={'request': request})
     else:
         raise_exception(500,'Serializer type not exists.')

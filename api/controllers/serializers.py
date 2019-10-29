@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from helios_auth.models import User
-from helios.models import Election, Trustee, Voter, CastVote
+from helios.models import Election, Trustee, Voter, CastVote, VoterFile
 from helios.crypto.elgamal import PublicKey
 from rest_framework.reverse import reverse
 
@@ -129,8 +129,20 @@ class VoterSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Voter
-        # fields = ('url', 'uuid', 'voter_name','voter_hash', 'alias', 'cast_at', 'election', 'user', 'vote_hash', 'vote_cast')
-        fields = '__all__'
+        fields = (
+            'url', 
+            'uuid', 
+            'voter_name', 
+            'voter_login_id', 
+            'voter_email', 
+            'voter_hash', 
+            'alias', 
+            'cast_at', 
+            'election', 
+            'user', 
+            'vote_hash', 
+            'vote_cast'
+        )
     
     def get_url(self,obj):
         request = self.context.get('request')
@@ -174,3 +186,29 @@ class PublicKeySerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicKey
         fields = '__all__'
+
+class VoterFileSerizlizer(serializers.ModelSerializer):
+    voter_file_content = serializers.SerializerMethodField()
+    uploaded_at = serializers.SerializerMethodField()
+    processing_finished_at = serializers.SerializerMethodField()
+    class Meta:
+        model = VoterFile
+        fields = ('voter_file_content', 'uploaded_at', 'processing_finished_at','num_voters')
+
+    def get_voter_file_content(self,obj):
+        result = []
+        lines = obj.voter_file_content.split('\n')
+        for i in range(len(lines) - 1):
+            voter = lines[i].split(',')
+            result.append({
+                "login": voter[0],
+                "email": voter[1],
+                "name": voter[2]
+            })
+        return result
+
+    def get_uploaded_at(self, obj):
+        return normalize_datetime(obj.uploaded_at)
+
+    def get_processing_finished_at(self,obj):
+        return normalize_datetime(obj.processing_finished_at)

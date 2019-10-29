@@ -170,7 +170,19 @@ class VoterViewDetail(APIView):
         except Exception as err:
             return get_error(err)
 
-class VoterUploadFile(APIView):
+class VoterFile(APIView):
+    def get(self,request,election_pk):
+        try:
+            election = getElection(election_pk)
+            if (election.openreg):
+                raise_exception(400, 'Open election dont have voter file')
+            voter_file = election.voterfile_set.get(election_id = election.id)
+            obj = serializer(voter_file, request)
+            return response(200, obj.data)
+        except Exception as err:
+            return get_error(err)
+
+
     def post(self,request,election_pk):
         try:
             election = getElection(election_pk)
@@ -188,7 +200,7 @@ class VoterUploadFile(APIView):
             return get_error(err)
 
 
-class VoterSendEmail(APIView):
+class VoterFileRegistry(APIView):
     def post(self, request,election_pk):
         try:
             voters = get_voter(election_pk)

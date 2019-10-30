@@ -2,6 +2,7 @@ version: '3.1'
 
 services:
   helios:
+    container_name: helios-app
     build: ./django
     image: helios-server
     restart: always
@@ -20,6 +21,7 @@ services:
       - db:postgres
   
   api:
+    container_name: helios-api
     build: ./django
     image: helios-server
     restart: always
@@ -35,11 +37,10 @@ services:
       - pip-cache:/root/.cache
       - vscode:/root/.vscode-server
   
-  redis:
-    image: "redis:alpine"
-
   celery:
+    container_name: helios-celery
     build: ./django
+    image: helios-server
     environment:
       CELERY: 'true'
       DB_HOST: 'db'
@@ -56,7 +57,13 @@ services:
       - pip-cache:/root/.cache
     depends_on:
       - redis
+
+  redis:
+    container_name: helios-redis
+    image: "redis:alpine"
+
   db:
+    container_name: helios-db
     image: postgres
     restart: always
     environment:

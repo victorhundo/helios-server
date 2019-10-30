@@ -118,8 +118,8 @@ def update_status(token, message):
   pass
 
 def send_message(user_id, user_name, user_info, subject, body):
-  email = user_id
-  name = user_name or user_info.get('name', email)
+  email = user_info.get('email')
+  name = user_info.get('name')
   send_mail(subject, '', settings.SERVER_EMAIL, ["\"%s\" <%s>" % (name, email)],
   fail_silently=False, html_message=body)
 

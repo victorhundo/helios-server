@@ -87,10 +87,7 @@ def voter_file_process(election,voter_file):
         if not user:
             new_user = True
             random_password = generate_password()
-            password.create_user(
-                voter['voter_id'],
-                random_password,
-                voter['name'])
+            password.create_user(voter['voter_id'], random_password, voter['name'], voter['email'])
             user = User.get_by_type_and_id('password', voter['voter_id'])
         
         voter_registered = create_voter(user,election)

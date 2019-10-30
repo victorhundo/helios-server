@@ -16,7 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request):
         try:
             user = json.loads(request.body)
-            password.create_user(user['user_id'],user['info']['password'], user['name'])
+            password.create_user(user['user_id'],user['info']['password'], user['name'],user['info']['email'])
             return Response({'status': '201'})
         except ValueError as err:
             return Response({'status': '400', 'message':str(err)}, status=status.HTTP_400_BAD_REQUEST)

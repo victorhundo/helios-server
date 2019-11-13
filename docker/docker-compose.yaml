@@ -64,7 +64,8 @@ services:
 
   db:
     container_name: helios-db
-    image: postgres
+    build: ./postgres
+    image: helios-db
     restart: always
     environment:
       POSTGRES_PASSWORD: example

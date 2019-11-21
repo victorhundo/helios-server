@@ -18,6 +18,12 @@ Publicações:
 
 # Guia de instalação e configuração do Helios
 
+## Helios em container
+
+Recomendamos a [instalação do Helios em container](https://github.com/victorhundo/helios-server/blob/master/docker/README.md)  pela facilidade e por ter um ambiente configurado pensado no melhor desempenho da aplicação.
+
+## Helios sem container
+
 *This README is intended for Portuguese audience.*
 
 Neste tutorial são descritos os principais passos para instalação de um servidor para disponibilização do Helios. Todo o tutorial considera a distribuição Linux Ubuntu (testado em 14.04 e 16.10 e, na versão mais recente deste tutorial, a 18.04), embora já tenha sido feita instalação no CentOs. A execução deste tutorial supõe alguma experiência com administração de sistemas em geral (instalação de pacotes, configuração de serviços, etc.).

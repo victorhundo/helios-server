@@ -1,3 +1,14 @@
+# Helios com API REST
+
+Sistema Helios com API REST desenvolvida para o Trabalho de Conclusão de Curso da graduação de Ciência da Computação na Universidade Federal de Campina Grande com orientação da professora Francilene Garcia.
+
+## Cliente da API
+
+Foi desenvolvido uma [aplicação web em Angular](http://github.com/victorhundo/noiz) para utilizar a API REST desenvolvida. Com a aplicação é é possível criar eleições de uma única questão, podendo ela ser aberta para qualquer usuário conectado ao sistema apto a votação ou um grupo específico de eleitores descrito em um arquivo CSV, também é possível gerenciar apuradores, eleitores, usuários, realizar a computação de votos e divulgar resultados.
+
+
+## Informações da ramificação do IFSC
+
 O objetivo deste projeto era inicialmente atender a [necessidade N.47 do PDTI 2013 do IFSC](http://dtic.ifsc.edu.br/files/pdti2013-revisao02.pdf).
 
 No entanto, logo percebeu-se que outras instituições, especialmente as de ensino, poderiam se beneficiar das melhorias realizadas no projeto original, a fim de atender ao público brasileiro.
